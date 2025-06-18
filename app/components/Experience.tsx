@@ -191,7 +191,7 @@ export default function Experience() {
                 </div>
                 <p className="mt-2 font-bold">Software Engineering Intern</p>
                 <p className="mt-0.5 text-lg text-gray-500">
-                  TypeScript | SQL | Ruby on Rails <br />
+                  TypeScript | MySQL | Ruby on Rails <br />
                   React Router | Google Cloud Platform
                 </p>
               </motion.div>
