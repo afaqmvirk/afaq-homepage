@@ -212,7 +212,7 @@ export default function Experience() {
                   >
                     Carleton University
                   </a>
-                  <span className="text-gray-400">(Sep 2024 – )</span>
+                  <span className="text-gray-400">(Sep 2024 – Apr 2027)</span>
                 </div>
                 <p className="mt-2 font-bold">Bachelor of Computer Science</p>
                 <p className="mt-1 text-lg text-gray-500">
