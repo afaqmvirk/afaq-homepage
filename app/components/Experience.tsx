@@ -187,7 +187,7 @@ export default function Experience() {
                   >
                     Shopify, Inc.
                   </a>
-                  <span className="text-gray-400">(Sep 2024 – )</span>
+                  <span className="text-gray-400">(Aug 2024 – )</span>
                 </div>
                 <p className="mt-2 font-bold">Software Engineering Intern</p>
                 <p className="mt-0.5 text-lg text-gray-500">
