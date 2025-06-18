@@ -31,7 +31,6 @@ export default function Index() {
       ></motion.img>
       <Hero />
       <Experience />
-      <Projects />
       <Contact />
     </div>
   );

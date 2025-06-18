@@ -16,7 +16,7 @@ export const meta: MetaFunction = () => {
 const phrases = [
   "Full-Stack Developer",
   "Technical Educator",
-  "building something interesting",
+  "building something cool",
 ];
 
 export default function Hero() {
@@ -154,13 +154,19 @@ export default function Hero() {
         </div>
       </motion.div>
       {/* Scrolling image below sticky content */}
-      <div className="flex justify-center mt-[-400px] ml-[70%] mix-blend-overlay">
+      <div className="flex justify-center mt-[-450px] ml-[70%] mix-blend-overlay">
         <img src="/htmltag.png" alt="HTML Tag" className="w-[15rem] h-auto" />
       </div>
-      <div className="flex justify-center mt-[800px] mr-[70%] mix-blend-overlay">
+      <div className="flex justify-center mt-[450px] mr-[70%] mix-blend-overlay">
+        <img src="/react.png" alt="HTML Tag" className="w-[15rem] h-auto" />
+      </div>
+      <div className="flex justify-center mt-[600px] ml-[70%] mix-blend-overlay">
         <img src="/grad.png" alt="HTML Tag" className="w-[15rem] h-auto" />
       </div>
-      <div className="flex justify-center mt-[800px] ml-[65%] p-0 mix-blend-overlay">
+      <div className="flex justify-center mt-[400px] mr-[75%] p-0 mix-blend-overlay">
+        <img src="/pencil.png" alt="HTML Tag" className=" w-[15rem] " />
+      </div>
+      <div className="flex justify-center mt-[400px] ml-[65%] p-0 mix-blend-overlay">
         <img src="/doodlebob.png" alt="HTML Tag" className=" w-[15rem] " />
       </div>
     </div>
