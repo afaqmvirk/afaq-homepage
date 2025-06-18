@@ -1,4 +1,3 @@
-import type { MetaFunction } from "@remix-run/node";
 import {
   motion,
   useScroll,
@@ -7,48 +6,46 @@ import {
   useTime,
 } from "framer-motion";
 import { useEffect } from "react";
-export const meta: MetaFunction = () => {
-  return [{ title: "Afaq Virk" }, { name: "description", content: " !" }];
-};
+import SocialBar from "./SocialBar";
 
 export default function Contact() {
   return (
-    <div className="h-[400vh]">
+    <div className="h-[200vh]">
       <div className=" h-screen content-center bg-hero-pattern justify-items-center sticky top-0 overflow-hidden">
         <motion.p
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-5xl text-3xl font-extrabold"
+          className="md:text-5xl text-3xl font-extrabold "
         >
-          Hey! I'm
-        </motion.p>
-        <br></br>
-        <motion.p
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="md:text-[12rem]/[8rem] text-[5rem]/[2rem] font-head"
-        >
-          AFAQ
+          You've made it this far.
         </motion.p>
         <motion.p
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-[10.5rem]/[12rem] text-[4.4rem]/[6rem] font-head"
+          className="md:text-5xl text-2xl mb-20"
         >
-          VIRK—
+          Let's get in touch.
         </motion.p>
-        <motion.p
-          initial={{ opacity: 0, scale: 0 }}
+        <motion.a
+          initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-5xl text-2xl font-extrabold"
+          className="md:text-5xl text-3xl font-bold bg-[#052829]  p-4 rounded-2xl"
+          href="mailto:afaq@mathematech.ca"
         >
-          Full-Stack Developer
-        </motion.p>
-        <div className=" absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-6">
-          <img src="/instagram.svg" className="h-[3rem] invert"></img>
-          <img src="/github.svg" className="h-[3rem] invert"></img>
-          <img src="/linkedin.svg" className="h-[3rem] invert"></img>
+          👉 afaq@mathematech.ca
+        </motion.a>
+        <div className=" flex space-x-6 mt-[5rem] mb-20">
+          <SocialBar />
         </div>
+        <motion.a
+          initial={{ opacity: 0, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="md:text-3xl text-2xl font-extrabold underline rounded-2xl"
+          href="/resume.pdf"
+          target="_blank"
+        >
+          Download resume (PDF)
+        </motion.a>
       </div>
     </div>
   );

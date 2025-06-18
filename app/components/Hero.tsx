@@ -6,19 +6,109 @@ import {
   useTransform,
   useTime,
 } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import SocialBar from "./SocialBar";
+
 export const meta: MetaFunction = () => {
   return [{ title: "Afaq Virk" }, { name: "description", content: " !" }];
 };
 
-export default function Hero() {
-  const time = useTime();
+const phrases = [
+  "Full-Stack Developer",
+  "Technical Educator",
+  "building something interesting",
+];
 
-  const { scrollY } = useScroll();
-  const rotate = useTransform(() => time.get() / 40 + scrollY.get() / 20);
+export default function Hero() {
+  const ref = useRef(null);
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+  const [targetPhrase, setTargetPhrase] = useState(phrases[0]);
+
+  const { scrollY } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+
+  // Transform scroll position to phrase index
+  const phraseIndex = useTransform(
+    scrollY,
+    [0, 500, 1200, 2300],
+    [0, 0, 1, 2],
+    { clamp: true }
+  );
+
+  // Blinking cursor animation
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  // Handle phrase transitions
+  useEffect(() => {
+    const unsubscribe = phraseIndex.on("change", (latest) => {
+      const newIndex = Math.round(latest);
+      if (newIndex !== currentPhraseIndex) {
+        const newPhrase = phrases[newIndex];
+        setTargetPhrase(newPhrase);
+
+        // Always start by deleting current text, then type new phrase
+        setIsDeleting(true);
+        setIsTyping(false);
+
+        setCurrentPhraseIndex(newIndex);
+      }
+    });
+    return unsubscribe;
+  }, [phraseIndex, currentPhraseIndex]);
+
+  // Deleting animation
+  useEffect(() => {
+    if (!isDeleting) return;
+
+    const deleteInterval = setInterval(() => {
+      setDisplayText((prev) => {
+        if (prev.length <= 0) {
+          setIsDeleting(false);
+          setIsTyping(true);
+          clearInterval(deleteInterval);
+          return "";
+        }
+        return prev.slice(0, -1);
+      });
+    }, 18);
+
+    return () => clearInterval(deleteInterval);
+  }, [isDeleting]);
+
+  // Typing animation
+  useEffect(() => {
+    if (!isTyping) return;
+
+    const currentPhrase = targetPhrase;
+    let currentIndex = 0;
+
+    const typeInterval = setInterval(() => {
+      if (currentIndex <= currentPhrase.length) {
+        setDisplayText(currentPhrase.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        setIsTyping(false);
+        clearInterval(typeInterval);
+      }
+    }, 52);
+
+    return () => clearInterval(typeInterval);
+  }, [targetPhrase, isTyping]);
+
   return (
-    <div className="h-[400vh]">
-      <div className=" h-screen content-center bg-hero-pattern justify-items-center sticky top-0 overflow-hidden">
+    <div className="h-[400vh]" ref={ref}>
+      <motion.div className=" h-screen content-center  justify-items-center sticky top-0 overflow-hidden">
         <motion.p
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -44,15 +134,34 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-5xl text-2xl font-extrabold"
+          className="md:text-5xl text-2xl font-mono font-extrabold"
         >
-          Full-Stack Developer
+          {displayText}
+          <span
+            className={`inline-block w-2 h-12 ml-1 mt-1 bg-current ${
+              isTyping || isDeleting
+                ? "opacity-100"
+                : showCursor
+                ? "opacity-100"
+                : "opacity-0"
+            } transition-opacity duration-75`}
+          >
+            &nbsp;
+          </span>
         </motion.p>
         <div className=" absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-6">
-          <img src="/instagram.svg" className="h-[3rem] invert"></img>
-          <img src="/github.svg" className="h-[3rem] invert"></img>
-          <img src="/linkedin.svg" className="h-[3rem] invert"></img>
+          <SocialBar />
         </div>
+      </motion.div>
+      {/* Scrolling image below sticky content */}
+      <div className="flex justify-center mt-[-400px] ml-[70%] mix-blend-overlay">
+        <img src="/htmltag.png" alt="HTML Tag" className="w-[15rem] h-auto" />
+      </div>
+      <div className="flex justify-center mt-[800px] mr-[70%] mix-blend-overlay">
+        <img src="/grad.png" alt="HTML Tag" className="w-[15rem] h-auto" />
+      </div>
+      <div className="flex justify-center mt-[800px] ml-[65%] p-0 mix-blend-overlay">
+        <img src="/doodlebob.png" alt="HTML Tag" className=" w-[15rem] " />
       </div>
     </div>
   );
