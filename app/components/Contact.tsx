@@ -29,7 +29,7 @@ export default function Contact() {
         <motion.a
           initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-5xl text-3xl font-bold bg-[#052829] p-4 rounded-2xl block mx-auto"
+          className="md:text-5xl text-3xl font-bold bg-[#052829] p-4 rounded-2xl mx-auto"
           href="mailto:afaq@mathematech.ca"
         >
           👉 afaq@mathematech.ca
@@ -40,7 +40,7 @@ export default function Contact() {
         <motion.a
           initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:text-3xl text-2xl font-extrabold underline rounded-2xl block mx-auto"
+          className="md:text-3xl text-2xl font-extrabold underline rounded-2xl mx-auto"
           href="/resume.pdf"
           target="_blank"
         >
