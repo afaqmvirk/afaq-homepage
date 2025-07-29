@@ -44,7 +44,7 @@ export default function Contact() {
           href="/resume.pdf"
           target="_blank"
         >
-          Download resume (PDF)
+          Download myresume (PDF)
         </motion.a>
       </div>
     </div>
