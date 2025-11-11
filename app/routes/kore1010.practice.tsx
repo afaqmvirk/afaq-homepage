@@ -75,8 +75,13 @@ export default function Kore1010Practice() {
   // Drawing pad
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Prevent double presses
+  const lastKeyPressRef = useRef<{ char: string; time: number } | null>(null);
+  const KEY_PRESS_DEBOUNCE_MS = 150;
 
   useEffect(() => {
     // Resize canvas to container
@@ -101,7 +106,7 @@ export default function Kore1010Practice() {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  const canvasCoords = (e: MouseEvent | TouchEvent) => {
+  const canvasCoords = (e: MouseEvent | TouchEvent | PointerEvent) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
@@ -111,29 +116,64 @@ export default function Kore1010Practice() {
       const t = e.touches[0] ?? e.changedTouches[0];
       clientX = t?.clientX ?? 0;
       clientY = t?.clientY ?? 0;
+    } else if ("pointerId" in e) {
+      // PointerEvent
+      clientX = e.clientX;
+      clientY = e.clientY;
     } else {
+      // MouseEvent
       clientX = (e as MouseEvent).clientX;
       clientY = (e as MouseEvent).clientY;
     }
     return { x: clientX - rect.left, y: clientY - rect.top };
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+  // Function to initialize drawing styles
+  const initializeDrawingStyles = () => {
+    const ctx = ctxRef.current;
     if (!ctx) return;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.strokeStyle = "#111827"; // gray-900
     ctx.lineWidth = 4;
+    ctx.fillStyle = "#111827"; // gray-900 for initial point
+  };
 
-    const onDown = (e: MouseEvent | TouchEvent) => {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    // Initialize canvas context and store in ref
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctxRef.current = ctx;
+
+    // Set drawing styles
+    initializeDrawingStyles();
+
+    const onDown = (e: MouseEvent | TouchEvent | PointerEvent) => {
+      const ctx = ctxRef.current;
+      if (!ctx) return;
+
+      // Re-initialize styles in case context was lost
+      initializeDrawingStyles();
+
       isDrawingRef.current = true;
-      lastPointRef.current = canvasCoords(e);
+      const point = canvasCoords(e);
+      lastPointRef.current = point;
+      // Draw initial point
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI);
+      ctx.fill();
+      e.preventDefault();
     };
-    const onMove = (e: MouseEvent | TouchEvent) => {
+
+    const onMove = (e: MouseEvent | TouchEvent | PointerEvent) => {
       if (!isDrawingRef.current) return;
+      const ctx = ctxRef.current;
+      if (!ctx) return;
+
       const next = canvasCoords(e);
       const last = lastPointRef.current;
       if (!last) {
@@ -147,41 +187,117 @@ export default function Kore1010Practice() {
       lastPointRef.current = next;
       e.preventDefault();
     };
-    const onUp = () => {
+
+    const onUp = (e?: MouseEvent | TouchEvent | PointerEvent) => {
+      if (e) e.preventDefault();
       isDrawingRef.current = false;
       lastPointRef.current = null;
     };
 
-    // Mouse
+    // Use pointer events for better cross-device support
+    const onPointerDown = (e: PointerEvent) => {
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch (err) {
+        // Pointer capture might fail, continue anyway
+      }
+      onDown(e);
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      // Check if we have capture, but also allow if we're drawing
+      if (isDrawingRef.current || canvas.hasPointerCapture(e.pointerId)) {
+        onMove(e);
+      }
+    };
+
+    const onPointerUp = (e: PointerEvent) => {
+      try {
+        canvas.releasePointerCapture(e.pointerId);
+      } catch (err) {
+        // Ignore errors
+      }
+      onUp(e);
+    };
+
+    // Mouse events (fallback)
     canvas.addEventListener("mousedown", onDown as any);
     canvas.addEventListener("mousemove", onMove as any);
     window.addEventListener("mouseup", onUp as any);
-    // Touch
+
+    // Pointer events (works for both mouse and touch)
+    canvas.addEventListener("pointerdown", onPointerDown as any);
+    canvas.addEventListener("pointermove", onPointerMove as any);
+    canvas.addEventListener("pointerup", onPointerUp as any);
+    canvas.addEventListener("pointercancel", onPointerUp as any);
+
+    // Touch events (additional support)
     canvas.addEventListener("touchstart", onDown as any, { passive: false });
     canvas.addEventListener("touchmove", onMove as any, { passive: false });
     window.addEventListener("touchend", onUp as any);
+    window.addEventListener("touchcancel", onUp as any);
 
     return () => {
       canvas.removeEventListener("mousedown", onDown as any);
       canvas.removeEventListener("mousemove", onMove as any);
       window.removeEventListener("mouseup", onUp as any);
+      canvas.removeEventListener("pointerdown", onPointerDown as any);
+      canvas.removeEventListener("pointermove", onPointerMove as any);
+      canvas.removeEventListener("pointerup", onPointerUp as any);
+      canvas.removeEventListener("pointercancel", onPointerUp as any);
       canvas.removeEventListener("touchstart", onDown as any);
       canvas.removeEventListener("touchmove", onMove as any);
       window.removeEventListener("touchend", onUp as any);
+      window.removeEventListener("touchcancel", onUp as any);
+    };
+  }, []);
+
+  // Handle visibility change (tab switch)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        // Tab became visible - reinitialize context and styles
+        const canvas = canvasRef.current;
+        if (canvas) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctxRef.current = ctx;
+            initializeDrawingStyles();
+            // Reset drawing state
+            isDrawingRef.current = false;
+            lastPointRef.current = null;
+          }
+        }
+      } else {
+        // Tab became hidden - reset drawing state
+        isDrawingRef.current = false;
+        lastPointRef.current = null;
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
     const container = containerRef.current;
-    if (ctx && container) {
-      const rect = container.getBoundingClientRect();
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, rect.width, rect.height);
-    }
+    if (!canvas || !container) return;
+
+    // Get fresh context and update ref
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctxRef.current = ctx;
+
+    const rect = container.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    // Reinitialize drawing styles
+    initializeDrawingStyles();
   };
 
   const handleNextCard = () => {
@@ -378,18 +494,58 @@ export default function Kore1010Practice() {
   ];
 
   const insertKoreanChar = (char: string) => {
+    const now = Date.now();
+    const last = lastKeyPressRef.current;
+
+    // Debounce: prevent double presses within 150ms
+    if (last && last.char === char && now - last.time < KEY_PRESS_DEBOUNCE_MS) {
+      return;
+    }
+
+    lastKeyPressRef.current = { char, time: now };
     setUserInput((prev) => handleKoreanInput(prev, char));
   };
 
   const handleBackspace = () => {
+    const now = Date.now();
+    const last = lastKeyPressRef.current;
+
+    // Debounce: prevent double presses within 150ms
+    if (
+      last &&
+      last.char === "Backspace" &&
+      now - last.time < KEY_PRESS_DEBOUNCE_MS
+    ) {
+      return;
+    }
+
+    lastKeyPressRef.current = { char: "Backspace", time: now };
     setUserInput((prev) => handleKoreanInput(prev, "Backspace"));
   };
 
   const handleSpace = () => {
+    const now = Date.now();
+    const last = lastKeyPressRef.current;
+
+    // Debounce: prevent double presses within 150ms
+    if (last && last.char === " " && now - last.time < KEY_PRESS_DEBOUNCE_MS) {
+      return;
+    }
+
+    lastKeyPressRef.current = { char: " ", time: now };
     setUserInput((prev) => handleKoreanInput(prev, " "));
   };
 
   const handlePunctuation = (char: string) => {
+    const now = Date.now();
+    const last = lastKeyPressRef.current;
+
+    // Debounce: prevent double presses within 150ms
+    if (last && last.char === char && now - last.time < KEY_PRESS_DEBOUNCE_MS) {
+      return;
+    }
+
+    lastKeyPressRef.current = { char, time: now };
     setUserInput((prev) => prev + char);
   };
 
@@ -398,33 +554,35 @@ export default function Kore1010Practice() {
       {/* Mode Toggle */}
       <div className="z-30 bg-white/90 backdrop-blur border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
-              className={`px-3 py-1 rounded text-sm ${
+              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
                 mode === "flashcards"
                   ? "bg-gray-900 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
               onClick={() => setMode("flashcards")}
+              aria-label="Flashcards"
             >
-              Flashcards
+              🃏
             </button>
             <button
-              className={`px-3 py-1 rounded text-sm ${
+              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
                 mode === "conversation"
                   ? "bg-gray-900 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
               onClick={() => setMode("conversation")}
+              aria-label="Conversation"
             >
-              Conversation
+              💬
             </button>
           </div>
           {mode === "flashcards" && (
             <>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
-                  className={`px-3 py-1 rounded text-sm flex items-center gap-1 ${
+                  className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
                     showStarredOnly
                       ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
                       : "bg-gray-100 text-gray-700"
@@ -434,12 +592,12 @@ export default function Kore1010Practice() {
                     setFlashIndex(0);
                     setIsFlipped(false);
                   }}
+                  aria-label="Starred"
                 >
-                  <span>{showStarredOnly ? "⭐" : "☆"}</span>
-                  <span>Starred</span>
+                  {showStarredOnly ? "★" : "☆"}
                 </button>
                 <button
-                  className={`px-3 py-1 rounded text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
                     inverseMode
                       ? "bg-blue-100 text-blue-800 border border-blue-300"
                       : "bg-gray-100 text-gray-700"
@@ -449,12 +607,13 @@ export default function Kore1010Practice() {
                     setIsFlipped(false);
                   }}
                 >
-                  Inverse
+                  <span className="hidden sm:inline">Inverse</span>
+                  <span className="sm:hidden">↔</span>
                 </button>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
-                  className={`px-3 py-1 rounded text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
                     activePos === "noun"
                       ? "bg-gray-900 text-white"
                       : "bg-gray-100 text-gray-700"
@@ -465,10 +624,11 @@ export default function Kore1010Practice() {
                     setIsFlipped(false);
                   }}
                 >
-                  Nouns
+                  <span className="hidden sm:inline">Nouns</span>
+                  <span className="sm:hidden">N</span>
                 </button>
                 <button
-                  className={`px-3 py-1 rounded text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
                     activePos === "verbAdj"
                       ? "bg-gray-900 text-white"
                       : "bg-gray-100 text-gray-700"
@@ -479,7 +639,8 @@ export default function Kore1010Practice() {
                     setIsFlipped(false);
                   }}
                 >
-                  Verbs/Adj
+                  <span className="hidden sm:inline">Verbs/Adj</span>
+                  <span className="sm:hidden">V</span>
                 </button>
               </div>
             </>
@@ -547,7 +708,7 @@ export default function Kore1010Practice() {
                           }}
                           aria-label={isStarred ? "Unstar" : "Star"}
                         >
-                          {isStarred ? "⭐" : "☆"}
+                          {isStarred ? "★" : "☆"}
                         </button>
 
                         {/* Content based on inverseMode */}
@@ -594,7 +755,7 @@ export default function Kore1010Practice() {
                           }}
                           aria-label={isStarred ? "Unstar" : "Star"}
                         >
-                          {isStarred ? "⭐" : "☆"}
+                          {isStarred ? "★" : "☆"}
                         </button>
 
                         {/* Content based on inverseMode and type */}
@@ -792,27 +953,22 @@ export default function Kore1010Practice() {
             </div>
 
             {/* Korean Keyboard */}
-            <div className="p-2 sm:p-3 bg-gray-50 border-t border-gray-200">
-              <div className="space-y-1.5 sm:space-y-1">
+            <div className="p-1.5 sm:p-3 bg-gray-50 border-t border-gray-200">
+              <div className="space-y-1 sm:space-y-1">
                 {koreanKeyboard.map((row, rowIdx) => (
                   <div
                     key={rowIdx}
-                    className="flex gap-1.5 sm:gap-1 justify-center flex-wrap"
+                    className="flex gap-1 sm:gap-1 justify-center flex-wrap"
                   >
                     {row.map((char) => (
                       <button
                         key={char}
-                        className="min-w-[44px] min-h-[44px] px-3 sm:px-2 py-2.5 sm:py-2 bg-white border border-gray-300 rounded text-lg sm:text-base hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          insertKoreanChar(char);
-                        }}
-                        onTouchStart={(e) => {
+                        className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                        onPointerDown={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           insertKoreanChar(char);
                         }}
-                        onMouseDown={(e) => e.preventDefault()}
                       >
                         {char}
                       </button>
@@ -820,14 +976,10 @@ export default function Kore1010Practice() {
                   </div>
                 ))}
                 {/* Special keys row */}
-                <div className="flex gap-1.5 sm:gap-1 justify-center flex-wrap">
+                <div className="flex gap-1 sm:gap-1 justify-center flex-wrap">
                   <button
-                    className="min-w-[44px] min-h-[44px] px-3 sm:px-2 py-2.5 sm:py-2 bg-white border border-gray-300 rounded text-lg sm:text-base hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePunctuation(",");
-                    }}
-                    onTouchStart={(e) => {
+                    className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                    onPointerDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handlePunctuation(",");
@@ -836,12 +988,8 @@ export default function Kore1010Practice() {
                     ,
                   </button>
                   <button
-                    className="min-w-[44px] min-h-[44px] px-3 sm:px-2 py-2.5 sm:py-2 bg-white border border-gray-300 rounded text-lg sm:text-base hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePunctuation("?");
-                    }}
-                    onTouchStart={(e) => {
+                    className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                    onPointerDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handlePunctuation("?");
@@ -850,12 +998,8 @@ export default function Kore1010Practice() {
                     ?
                   </button>
                   <button
-                    className="min-w-[80px] min-h-[44px] px-6 py-2.5 sm:py-2 bg-white border border-gray-300 rounded text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSpace();
-                    }}
-                    onTouchStart={(e) => {
+                    className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-xs sm:text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                    onPointerDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleSpace();
@@ -864,12 +1008,8 @@ export default function Kore1010Practice() {
                     Space
                   </button>
                   <button
-                    className="min-w-[80px] min-h-[44px] px-6 py-2.5 sm:py-2 bg-white border border-gray-300 rounded text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleBackspace();
-                    }}
-                    onTouchStart={(e) => {
+                    className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                    onPointerDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleBackspace();
