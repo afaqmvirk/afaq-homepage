@@ -556,23 +556,41 @@ export default function Kore1010Practice() {
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button
-              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
+              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm touch-manipulation ${
                 mode === "flashcards"
                   ? "bg-gray-900 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
-              onClick={() => setMode("flashcards")}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMode("flashcards");
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMode("flashcards");
+              }}
               aria-label="Flashcards"
             >
               🃏
             </button>
             <button
-              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
+              className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm touch-manipulation ${
                 mode === "conversation"
                   ? "bg-gray-900 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
-              onClick={() => setMode("conversation")}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMode("conversation");
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMode("conversation");
+              }}
               aria-label="Conversation"
             >
               💬
@@ -582,12 +600,21 @@ export default function Kore1010Practice() {
             <>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
-                  className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-base sm:text-sm touch-manipulation ${
                     showStarredOnly
                       ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
                       : "bg-gray-100 text-gray-700"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowStarredOnly((v) => !v);
+                    setFlashIndex(0);
+                    setIsFlipped(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setShowStarredOnly((v) => !v);
                     setFlashIndex(0);
                     setIsFlipped(false);
@@ -597,12 +624,20 @@ export default function Kore1010Practice() {
                   {showStarredOnly ? "★" : "☆"}
                 </button>
                 <button
-                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm touch-manipulation ${
                     inverseMode
                       ? "bg-blue-100 text-blue-800 border border-blue-300"
                       : "bg-gray-100 text-gray-700"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setInverseMode((v) => !v);
+                    setIsFlipped(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setInverseMode((v) => !v);
                     setIsFlipped(false);
                   }}
@@ -613,12 +648,21 @@ export default function Kore1010Practice() {
               </div>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
-                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm touch-manipulation ${
                     activePos === "noun"
                       ? "bg-gray-900 text-white"
                       : "bg-gray-100 text-gray-700"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setActivePos("noun");
+                    setFlashIndex(0);
+                    setIsFlipped(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setActivePos("noun");
                     setFlashIndex(0);
                     setIsFlipped(false);
@@ -628,12 +672,21 @@ export default function Kore1010Practice() {
                   <span className="sm:hidden">N</span>
                 </button>
                 <button
-                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm touch-manipulation ${
                     activePos === "verbAdj"
                       ? "bg-gray-900 text-white"
                       : "bg-gray-100 text-gray-700"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setActivePos("verbAdj");
+                    setFlashIndex(0);
+                    setIsFlipped(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setActivePos("verbAdj");
                     setFlashIndex(0);
                     setIsFlipped(false);
@@ -691,7 +744,16 @@ export default function Kore1010Practice() {
                         ? "rotateY(180deg)"
                         : "rotateY(0deg)",
                     }}
-                    onClick={() => setIsFlipped(!isFlipped)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsFlipped(!isFlipped);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsFlipped(!isFlipped);
+                    }}
                   >
                     {/* Front side */}
                     <div
@@ -701,8 +763,14 @@ export default function Kore1010Practice() {
                       <div className="p-8 sm:p-12 text-center min-h-[280px] sm:min-h-[320px] flex flex-col justify-center">
                         {/* Star button */}
                         <button
-                          className="absolute top-4 left-4 text-2xl focus:outline-none z-10"
+                          className="absolute top-4 left-4 text-2xl focus:outline-none z-10 touch-manipulation"
                           onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleStar();
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             toggleStar();
                           }}
@@ -748,8 +816,14 @@ export default function Kore1010Practice() {
                       <div className="p-8 sm:p-12 text-center min-h-[280px] sm:min-h-[320px] flex flex-col justify-center">
                         {/* Star button (back side) */}
                         <button
-                          className="absolute top-4 left-4 text-2xl focus:outline-none z-10"
+                          className="absolute top-4 left-4 text-2xl focus:outline-none z-10 touch-manipulation"
                           onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleStar();
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             toggleStar();
                           }}
@@ -836,8 +910,17 @@ export default function Kore1010Practice() {
 
               {/* Next button (circular, right side) */}
               <button
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gray-900 text-white flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors focus:outline-none z-10"
-                onClick={handleNextCard}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gray-900 text-white flex items-center justify-center shadow-lg hover:bg-gray-800 transition-colors focus:outline-none z-10 touch-manipulation"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleNextCard();
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleNextCard();
+                }}
                 aria-label="Next card"
               >
                 <svg
@@ -897,8 +980,16 @@ export default function Kore1010Practice() {
                     {msg.isBot && msg.translation && !isTyping && (
                       <button
                         className="mt-1 text-xs text-gray-500 hover:text-gray-700 underline touch-manipulation"
-                        onClick={() => toggleTranslation(msg.id)}
-                        onTouchStart={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleTranslation(msg.id);
+                        }}
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleTranslation(msg.id);
+                        }}
                       >
                         {showTranslation.has(msg.id) ? "Hide" : "Translate"}
                       </button>
@@ -945,8 +1036,17 @@ export default function Kore1010Practice() {
                 spellCheck="false"
               />
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                onClick={handleSendMessage}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 touch-manipulation"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSendMessage();
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSendMessage();
+                }}
               >
                 Send
               </button>
@@ -964,7 +1064,12 @@ export default function Kore1010Practice() {
                       <button
                         key={char}
                         className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                        onPointerDown={(e) => {
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          insertKoreanChar(char);
+                        }}
+                        onTouchEnd={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           insertKoreanChar(char);
@@ -979,7 +1084,12 @@ export default function Kore1010Practice() {
                 <div className="flex gap-1 sm:gap-1 justify-center flex-wrap">
                   <button
                     className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onPointerDown={(e) => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handlePunctuation(",");
+                    }}
+                    onTouchEnd={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handlePunctuation(",");
@@ -989,7 +1099,12 @@ export default function Kore1010Practice() {
                   </button>
                   <button
                     className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onPointerDown={(e) => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handlePunctuation("?");
+                    }}
+                    onTouchEnd={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handlePunctuation("?");
@@ -999,7 +1114,12 @@ export default function Kore1010Practice() {
                   </button>
                   <button
                     className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-xs sm:text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onPointerDown={(e) => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleSpace();
+                    }}
+                    onTouchEnd={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleSpace();
@@ -1009,7 +1129,12 @@ export default function Kore1010Practice() {
                   </button>
                   <button
                     className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onPointerDown={(e) => {
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleBackspace();
+                    }}
+                    onTouchEnd={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleBackspace();
@@ -1032,8 +1157,17 @@ export default function Kore1010Practice() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  className="px-3 py-2 rounded bg-gray-100 text-sm"
-                  onClick={clearCanvas}
+                  className="px-3 py-2 rounded bg-gray-100 text-sm touch-manipulation"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    clearCanvas();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    clearCanvas();
+                  }}
                 >
                   Clear
                 </button>
