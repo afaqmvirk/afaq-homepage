@@ -46,6 +46,7 @@ export default function Kore1010Practice() {
     {}
   );
   const [useNativeKeyboard, setUseNativeKeyboard] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Shuffled conversation questions (randomized once per session)
   const [shuffledQuestions] = useState(() => {
@@ -106,6 +107,9 @@ export default function Kore1010Practice() {
       const canvas = canvasRef.current;
       const container = containerRef.current;
       if (!canvas || !container) return;
+      // Only resize if in flashcards mode
+      if (mode !== "flashcards") return;
+
       const dpr = window.devicePixelRatio || 1;
       const rect = container.getBoundingClientRect();
       canvas.width = Math.floor(rect.width * dpr);
@@ -116,12 +120,15 @@ export default function Kore1010Practice() {
         // background
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, rect.width, rect.height);
+        // Update context ref and reinitialize styles
+        ctxRef.current = ctx;
+        initializeDrawingStyles();
       }
     };
     resize();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, []);
+  }, [mode]);
 
   const canvasCoords = (e: MouseEvent | TouchEvent | PointerEvent) => {
     const canvas = canvasRef.current;
@@ -160,6 +167,9 @@ export default function Kore1010Practice() {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
+
+    // Only set up drawing if we're in flashcards mode (where drawing pad is visible)
+    if (mode !== "flashcards") return;
 
     // Initialize canvas context and store in ref
     const ctx = canvas.getContext("2d");
@@ -267,7 +277,7 @@ export default function Kore1010Practice() {
       window.removeEventListener("touchend", onUp as any);
       window.removeEventListener("touchcancel", onUp as any);
     };
-  }, []);
+  }, [mode]);
 
   // Handle visibility change (tab switch)
   useEffect(() => {
@@ -1060,6 +1070,7 @@ export default function Kore1010Practice() {
             {/* Text input */}
             <div className="flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 min-w-0">
               <input
+                ref={inputRef}
                 type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
@@ -1074,6 +1085,7 @@ export default function Kore1010Practice() {
                     e.target.blur();
                   }
                 }}
+                readOnly={!useNativeKeyboard && window.innerWidth < 768}
                 className="flex-1 min-w-0 px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-sm sm:text-base touch-manipulation bg-white text-gray-900"
                 placeholder="Type your answer..."
                 inputMode={useNativeKeyboard ? "text" : "none"}
@@ -1087,12 +1099,30 @@ export default function Kore1010Practice() {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setUseNativeKeyboard((v) => !v);
+                  setUseNativeKeyboard((v) => {
+                    const newValue = !v;
+                    // Focus input when switching to native keyboard
+                    if (newValue && inputRef.current) {
+                      setTimeout(() => {
+                        inputRef.current?.focus();
+                      }, 100);
+                    }
+                    return newValue;
+                  });
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setUseNativeKeyboard((v) => !v);
+                  setUseNativeKeyboard((v) => {
+                    const newValue = !v;
+                    // Focus input when switching to native keyboard
+                    if (newValue && inputRef.current) {
+                      setTimeout(() => {
+                        inputRef.current?.focus();
+                      }, 100);
+                    }
+                    return newValue;
+                  });
                 }}
                 aria-label={
                   useNativeKeyboard
