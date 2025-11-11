@@ -45,6 +45,17 @@ export default function Kore1010Practice() {
   const [displayedTexts, setDisplayedTexts] = useState<Record<string, string>>(
     {}
   );
+  const [useNativeKeyboard, setUseNativeKeyboard] = useState(false);
+
+  // Shuffled conversation questions (randomized once per session)
+  const [shuffledQuestions] = useState(() => {
+    const shuffled = [...CONVERSATION_QUESTIONS];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  });
 
   // Flashcards
   const [flashIndex, setFlashIndex] = useState(0);
@@ -61,7 +72,13 @@ export default function Kore1010Practice() {
     if (showStarredOnly) {
       cards = cards.filter((c) => starredWords.has(`${c.ko}-${c.pos}`));
     }
-    return cards;
+    // Randomize the order
+    const shuffled = [...cards];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }, [activePos, showStarredOnly, starredWords]);
 
   const currentCard =
@@ -365,8 +382,8 @@ export default function Kore1010Practice() {
   // Conversation mode functions
   useEffect(() => {
     if (mode === "conversation" && conversationMessages.length === 0) {
-      // Start with first question
-      const firstQ = CONVERSATION_QUESTIONS[0];
+      // Start with first question from shuffled list
+      const firstQ = shuffledQuestions[0];
       if (firstQ) {
         const msgId = `q-0`;
         setConversationMessages([
@@ -380,9 +397,10 @@ export default function Kore1010Practice() {
         ]);
         setDisplayedTexts({ [msgId]: "" });
         setTypingMessageId(msgId);
+        setCurrentQuestionIndex(0);
       }
     }
-  }, [mode, conversationMessages.length]);
+  }, [mode, conversationMessages.length, shuffledQuestions]);
 
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
@@ -401,9 +419,8 @@ export default function Kore1010Practice() {
 
     // Add next question after a short delay with typing animation
     setTimeout(() => {
-      const nextIndex =
-        (currentQuestionIndex + 1) % CONVERSATION_QUESTIONS.length;
-      const nextQ = CONVERSATION_QUESTIONS[nextIndex];
+      const nextIndex = (currentQuestionIndex + 1) % shuffledQuestions.length;
+      const nextQ = shuffledQuestions[nextIndex];
       if (nextQ) {
         const msgId = `q-${nextIndex}`;
         const botMsg: ConversationMessage = {
@@ -533,7 +550,37 @@ export default function Kore1010Practice() {
     }
 
     lastKeyPressRef.current = { char: " ", time: now };
-    setUserInput((prev) => handleKoreanInput(prev, " "));
+
+    setUserInput((prev) => {
+      if (!prev) return " ";
+
+      const lastChar = prev.slice(-1);
+      const lastCode = lastChar.charCodeAt(0);
+
+      // Check if last char is a jamo (incomplete syllable)
+      const INITIAL_CONSONANTS = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+      const VOWELS = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
+
+      // If last char is a jamo (not a complete syllable), complete it with ㅇ
+      if (INITIAL_CONSONANTS.includes(lastChar) || VOWELS.includes(lastChar)) {
+        // It's a jamo - complete the syllable by adding ㅇ if needed
+        if (INITIAL_CONSONANTS.includes(lastChar)) {
+          // It's an initial consonant - add ㅣ vowel to complete
+          const initialIdx = INITIAL_CONSONANTS.indexOf(lastChar);
+          const vowelIdx = VOWELS.indexOf("ㅣ"); // Use ㅣ as default
+          const syllableCode = 0xac00 + initialIdx * 588 + vowelIdx * 28;
+          return prev.slice(0, -1) + String.fromCharCode(syllableCode) + " ";
+        } else if (VOWELS.includes(lastChar)) {
+          // It's a vowel - add ㅇ initial to complete
+          const vowelIdx = VOWELS.indexOf(lastChar);
+          const syllableCode = 0xac00 + 11 * 588 + vowelIdx * 28; // ㅇ + vowel
+          return prev.slice(0, -1) + String.fromCharCode(syllableCode) + " ";
+        }
+      }
+
+      // Last char is a complete syllable or other character - just add space
+      return prev + " ";
+    });
   };
 
   const handlePunctuation = (char: string) => {
@@ -944,9 +991,9 @@ export default function Kore1010Practice() {
 
       {/* Conversation Mode */}
       {mode === "conversation" ? (
-        <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4">
+        <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4 min-h-0">
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto py-4 space-y-3">
+          <div className="flex-1 overflow-y-auto py-4 space-y-3 min-h-0">
             {conversationMessages.map((msg) => {
               const displayedText =
                 msg.isBot && typingMessageId === msg.id
@@ -1009,9 +1056,9 @@ export default function Kore1010Practice() {
           </div>
 
           {/* Input area with Korean keyboard */}
-          <div className="border-t border-gray-200 bg-white">
+          <div className="border-t border-gray-200 bg-white flex-shrink-0">
             {/* Text input */}
-            <div className="flex items-center gap-2 p-2">
+            <div className="flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 min-w-0">
               <input
                 type="text"
                 value={userInput}
@@ -1023,20 +1070,40 @@ export default function Kore1010Practice() {
                 }}
                 onFocus={(e) => {
                   // Prevent native keyboard on mobile when using custom keyboard
-                  if (window.innerWidth < 768) {
+                  if (!useNativeKeyboard && window.innerWidth < 768) {
                     e.target.blur();
                   }
                 }}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-base touch-manipulation bg-white text-gray-900"
+                className="flex-1 min-w-0 px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-sm sm:text-base touch-manipulation bg-white text-gray-900"
                 placeholder="Type your answer..."
-                inputMode="none"
+                inputMode={useNativeKeyboard ? "text" : "none"}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck="false"
               />
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 touch-manipulation"
+                className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 rounded text-sm bg-gray-100 hover:bg-gray-200 touch-manipulation"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setUseNativeKeyboard((v) => !v);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setUseNativeKeyboard((v) => !v);
+                }}
+                aria-label={
+                  useNativeKeyboard
+                    ? "Use custom keyboard"
+                    : "Use native keyboard"
+                }
+              >
+                {useNativeKeyboard ? "⌨️" : "🌐"}
+              </button>
+              <button
+                className="flex-shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 touch-manipulation text-sm sm:text-base whitespace-nowrap"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -1053,98 +1120,97 @@ export default function Kore1010Practice() {
             </div>
 
             {/* Korean Keyboard */}
-            <div className="p-1.5 sm:p-3 bg-gray-50 border-t border-gray-200">
-              <div className="space-y-1 sm:space-y-1">
-                {koreanKeyboard.map((row, rowIdx) => (
-                  <div
-                    key={rowIdx}
-                    className="flex gap-1 sm:gap-1 justify-center flex-wrap"
-                  >
-                    {row.map((char) => (
-                      <button
-                        key={char}
-                        className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          insertKoreanChar(char);
-                        }}
-                        onTouchEnd={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          insertKoreanChar(char);
-                        }}
-                      >
-                        {char}
-                      </button>
-                    ))}
+            {!useNativeKeyboard && (
+              <div className="p-1.5 sm:p-3 bg-gray-50 border-t border-gray-200">
+                <div className="space-y-1 sm:space-y-1">
+                  {koreanKeyboard.map((row, rowIdx) => (
+                    <div key={rowIdx} className="flex gap-0.5 sm:gap-1 w-full">
+                      {row.map((char) => (
+                        <button
+                          key={char}
+                          className="flex-1 min-h-[36px] sm:min-h-[44px] px-0.5 sm:px-1 py-1 sm:py-2 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            insertKoreanChar(char);
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            insertKoreanChar(char);
+                          }}
+                        >
+                          {char}
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                  {/* Special keys row */}
+                  <div className="flex gap-0.5 sm:gap-1 w-full">
+                    <button
+                      className="flex-1 min-h-[28px] sm:min-h-[36px] px-0.5 sm:px-1 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handlePunctuation(",");
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handlePunctuation(",");
+                      }}
+                    >
+                      ,
+                    </button>
+                    <button
+                      className="flex-1 min-h-[28px] sm:min-h-[36px] px-0.5 sm:px-1 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handlePunctuation("?");
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handlePunctuation("?");
+                      }}
+                    >
+                      ?
+                    </button>
+                    <button
+                      className="flex-[2] min-h-[36px] sm:min-h-[44px] px-1 sm:px-2 py-1 sm:py-2 bg-white border border-gray-300 rounded text-xs sm:text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSpace();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSpace();
+                      }}
+                    >
+                      Space
+                    </button>
+                    <button
+                      className="flex-1 min-h-[28px] sm:min-h-[36px] px-0.5 sm:px-1 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleBackspace();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleBackspace();
+                      }}
+                    >
+                      ⌫
+                    </button>
                   </div>
-                ))}
-                {/* Special keys row */}
-                <div className="flex gap-1 sm:gap-1 justify-center flex-wrap">
-                  <button
-                    className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handlePunctuation(",");
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handlePunctuation(",");
-                    }}
-                  >
-                    ,
-                  </button>
-                  <button
-                    className="min-w-[36px] sm:min-w-[44px] min-h-[28px] sm:min-h-[36px] px-1.5 sm:px-2 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handlePunctuation("?");
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handlePunctuation("?");
-                    }}
-                  >
-                    ?
-                  </button>
-                  <button
-                    className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-xs sm:text-sm hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleSpace();
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleSpace();
-                    }}
-                  >
-                    Space
-                  </button>
-                  <button
-                    className="min-w-[60px] sm:min-w-[80px] min-h-[28px] sm:min-h-[36px] px-3 sm:px-6 py-0.5 sm:py-1.5 bg-white border border-gray-300 rounded text-base sm:text-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation select-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleBackspace();
-                    }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleBackspace();
-                    }}
-                  >
-                    ⌫
-                  </button>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       ) : (
