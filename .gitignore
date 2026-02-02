@@ -3,3 +3,9 @@ node_modules
 /.cache
 /build
 .env
+*.tex
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
