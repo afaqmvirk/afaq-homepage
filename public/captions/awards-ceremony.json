@@ -1,0 +1,74 @@
+{
+  "cues": [
+    {
+      "start": 0,
+      "end": 0.42,
+      "text": "that's 61 years"
+    },
+    {
+      "start": 0.42,
+      "end": 2.4,
+      "text": "this award would be presented by Trevor"
+    },
+    {
+      "start": 2.4,
+      "end": 4.38,
+      "text": "McGuire with the Youth Science Canada"
+    },
+    {
+      "start": 4.38,
+      "end": 7.2,
+      "text": "board of directors"
+    },
+    {
+      "start": 7.2,
+      "end": 11.04,
+      "text": "and the winner is Afaq Virk of United"
+    },
+    {
+      "start": 11.04,
+      "end": 12.42,
+      "text": "counties"
+    },
+    {
+      "start": 12.42,
+      "end": 14.28,
+      "text": "Ontario"
+    },
+    {
+      "start": 14.28,
+      "end": 17.819,
+      "text": "[Applause]"
+    },
+    {
+      "start": 24.91,
+      "end": 35.679,
+      "text": "[Music]"
+    },
+    {
+      "start": 35.88,
+      "end": 38.88,
+      "text": "foreign"
+    },
+    {
+      "start": 49.76,
+      "end": 52.74,
+      "text": "is the center for the Canadian nuclear"
+    },
+    {
+      "start": 52.74,
+      "end": 55.319,
+      "text": "sustainability award this award will be"
+    },
+    {
+      "start": 55.319,
+      "end": 57.96,
+      "text": "presented by gong Shu from the center"
+    },
+    {
+      "start": 57.96,
+      "end": 61.76,
+      "text": "for Canadian nuclear sustainability"
+    }
+  ]
+}

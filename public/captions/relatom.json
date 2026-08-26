@@ -1,0 +1,474 @@
+{
+  "cues": [
+    {
+      "start": 120,
+      "end": 121.6,
+      "text": "then isotopes right here. And so it"
+    },
+    {
+      "start": 121.6,
+      "end": 124,
+      "text": "loads all 118 elements and a sample of"
+    },
+    {
+      "start": 124,
+      "end": 127.2,
+      "text": "like 289 of those elements isotopes. And"
+    },
+    {
+      "start": 127.2,
+      "end": 128.959,
+      "text": "now we can see those relations loaded."
+    },
+    {
+      "start": 128.959,
+      "end": 132,
+      "text": "We can also take a look at their schema"
+    },
+    {
+      "start": 132,
+      "end": 134.4,
+      "text": "elements."
+    },
+    {
+      "start": 134.4,
+      "end": 136.319,
+      "text": "And we can take a look and use the show"
+    },
+    {
+      "start": 136.319,
+      "end": 139.28,
+      "text": "command to show the first eight"
+    },
+    {
+      "start": 139.28,
+      "end": 141.28,
+      "text": "elements,"
+    },
+    {
+      "start": 141.28,
+      "end": 142.879,
+      "text": "right? Hydrogen, helium, lithium,"
+    },
+    {
+      "start": 142.879,
+      "end": 145.2,
+      "text": "brillium, and so forth. And what we can"
+    },
+    {
+      "start": 145.2,
+      "end": 147.2,
+      "text": "do let's run a few queries now. And"
+    },
+    {
+      "start": 147.2,
+      "end": 148.879,
+      "text": "let's say we wanted to get all of the"
+    },
+    {
+      "start": 148.879,
+      "end": 151.28,
+      "text": "gas elements. So what we're going to do"
+    },
+    {
+      "start": 151.28,
+      "end": 155.2,
+      "text": "is run this command. Select state at STP"
+    },
+    {
+      "start": 155.2,
+      "end": 157.12,
+      "text": "equals gas. So this gets all the ones"
+    },
+    {
+      "start": 157.12,
+      "end": 159.519,
+      "text": "where the state of matter at standard"
+    },
+    {
+      "start": 159.519,
+      "end": 161.76,
+      "text": "temperature and pressure is a gas. And"
+    },
+    {
+      "start": 161.76,
+      "end": 163.519,
+      "text": "so it gives us hydrogen, helium,"
+    },
+    {
+      "start": 163.519,
+      "end": 166.08,
+      "text": "nitrogen, oxygen, florine, and so forth."
+    },
+    {
+      "start": 166.08,
+      "end": 168.56,
+      "text": "The ones we expect of course to be"
+    },
+    {
+      "start": 168.56,
+      "end": 170.959,
+      "text": "gases. So, that's great. And what"
+    },
+    {
+      "start": 170.959,
+      "end": 173.76,
+      "text": "we're going to show also is a project"
+    },
+    {
+      "start": 173.76,
+      "end": 177.12,
+      "text": "and then a select. So, what this next"
+    },
+    {
+      "start": 177.12,
+      "end": 179.12,
+      "text": "command is going to do, and I'm going to"
+    },
+    {
+      "start": 179.12,
+      "end": 181.44,
+      "text": "put it in right here. Just copied and"
+    },
+    {
+      "start": 181.44,
+      "end": 183.68,
+      "text": "pasted these to speed up the demo a"
+    },
+    {
+      "start": 183.68,
+      "end": 185.44,
+      "text": "little bit, but we have project, and we"
+    },
+    {
+      "start": 185.44,
+      "end": 188.08,
+      "text": "want just the symbol as well as the"
+    },
+    {
+      "start": 188.08,
+      "end": 190.64,
+      "text": "element name. And we want that of all"
+    },
+    {
+      "start": 190.64,
+      "end": 193.12,
+      "text": "the noble gases. So if we pop that up"
+    },
+    {
+      "start": 193.12,
+      "end": 194.8,
+      "text": "right there, we see a nice formatted"
+    },
+    {
+      "start": 194.8,
+      "end": 196.239,
+      "text": "table showing only the symbols and"
+    },
+    {
+      "start": 196.239,
+      "end": 199.12,
+      "text": "elements of helium, neon, argan. These"
+    },
+    {
+      "start": 199.12,
+      "end": 201.28,
+      "text": "are all the noble gases. And of course,"
+    },
+    {
+      "start": 201.28,
+      "end": 203.36,
+      "text": "we can run a few more complex queries."
+    },
+    {
+      "start": 203.36,
+      "end": 206.64,
+      "text": "Let's take a look at this one. This one"
+    },
+    {
+      "start": 206.64,
+      "end": 208.48,
+      "text": "has a join, it has a reject, it has a"
+    },
+    {
+      "start": 208.48,
+      "end": 210.72,
+      "text": "select. What we want to get is the a"
+    },
+    {
+      "start": 210.72,
+      "end": 214.48,
+      "text": "which is the atomic number of and and"
+    },
+    {
+      "start": 214.48,
+      "end": 217.599,
+      "text": "show the element name of all radioactive"
+    },
+    {
+      "start": 217.599,
+      "end": 219.68,
+      "text": "isotopes with an atomic mass greater"
+    },
+    {
+      "start": 219.68,
+      "end": 222.48,
+      "text": "than or equal to 40. So here we have"
+    },
+    {
+      "start": 222.48,
+      "end": 224.08,
+      "text": "this complex query. You can see it"
+    },
+    {
+      "start": 224.08,
+      "end": 226.48,
+      "text": "handles that just fine. It gives us the"
+    },
+    {
+      "start": 226.48,
+      "end": 229.12,
+      "text": "element name as well as the atomic mass"
+    },
+    {
+      "start": 229.12,
+      "end": 231.84,
+      "text": "of all radioactive isotopes. So these"
+    },
+    {
+      "start": 231.84,
+      "end": 234,
+      "text": "are all the radioactive isotopes in our"
+    },
+    {
+      "start": 234,
+      "end": 236.239,
+      "text": "sample. Let's take a look at some of the"
+    },
+    {
+      "start": 236.239,
+      "end": 239.12,
+      "text": "ads unions etc. and to do that we're"
+    },
+    {
+      "start": 239.12,
+      "end": 242,
+      "text": "going to include and manually write in"
+    },
+    {
+      "start": 242,
+      "end": 244.08,
+      "text": "some relation definitions. Let's say we"
+    },
+    {
+      "start": 244.08,
+      "end": 249.84,
+      "text": "have this one right here equals 1 2"
+    },
+    {
+      "start": 249.84,
+      "end": 252.239,
+      "text": "2 3 for instance. Right? Then we have"
+    },
+    {
+      "start": 252.239,
+      "end": 257.199,
+      "text": "another one be and its parameter xy"
+    },
+    {
+      "start": 257.199,
+      "end": 262.4,
+      "text": "equals 2 3 and 34."
+    },
+    {
+      "start": 262.4,
+      "end": 264,
+      "text": "Right? So it has a couple unique sets"
+    },
+    {
+      "start": 264,
+      "end": 266.72,
+      "text": "right here. That is 1 2 2 3 and then 2 3"
+    },
+    {
+      "start": 266.72,
+      "end": 268.96,
+      "text": "and 3 4. We're going to end right there."
+    },
+    {
+      "start": 268.96,
+      "end": 270.88,
+      "text": "We have two new relations in right"
+    },
+    {
+      "start": 270.88,
+      "end": 274.639,
+      "text": "there. What we can do is take A union B"
+    },
+    {
+      "start": 274.639,
+      "end": 276.08,
+      "text": "and it should get rid of the duplicate"
+    },
+    {
+      "start": 276.08,
+      "end": 278.56,
+      "text": "right there. So now it's just 1 2 2 3 3"
+    },
+    {
+      "start": 278.56,
+      "end": 284,
+      "text": "4 as we expect. A intersect B."
+    },
+    {
+      "start": 284,
+      "end": 287.36,
+      "text": "And here it shows the the actual"
+    },
+    {
+      "start": 287.36,
+      "end": 289.919,
+      "text": "syntax right there. The intersect which"
+    },
+    {
+      "start": 289.919,
+      "end": 292.24,
+      "text": "is just two and three. And then you f"
+    },
+    {
+      "start": 292.24,
+      "end": 294.4,
+      "text": "and then we can also take the difference"
+    },
+    {
+      "start": 294.4,
+      "end": 299.28,
+      "text": "a diff b. There we go. We can also do"
+    },
+    {
+      "start": 299.28,
+      "end": 303.639,
+      "text": "a join b"
+    },
+    {
+      "start": 304.639,
+      "end": 307.28,
+      "text": "and it shows the full explicit table"
+    },
+    {
+      "start": 307.28,
+      "end": 309.52,
+      "text": "right there. We can also take in going"
+    },
+    {
+      "start": 309.52,
+      "end": 311.36,
+      "text": "back to our elements we can also feed it"
+    },
+    {
+      "start": 311.36,
+      "end": 313.36,
+      "text": "directly the unic code symbols for like"
+    },
+    {
+      "start": 313.36,
+      "end": 315.759,
+      "text": "pi and sigma and whatnot and the"
+    },
+    {
+      "start": 315.759,
+      "end": 317.28,
+      "text": "actual like you know algebraic"
+    },
+    {
+      "start": 317.28,
+      "end": 319.28,
+      "text": "mathematical formula and it works just"
+    },
+    {
+      "start": 319.28,
+      "end": 321.039,
+      "text": "fine as well. it'll parse it either way"
+    },
+    {
+      "start": 321.039,
+      "end": 323.44,
+      "text": "and it'll show right there exactly"
+    },
+    {
+      "start": 323.44,
+      "end": 326.639,
+      "text": "what it's looking for. So, that works"
+    },
+    {
+      "start": 326.639,
+      "end": 328.639,
+      "text": "as well. And of course, it has proper"
+    },
+    {
+      "start": 328.639,
+      "end": 330.479,
+      "text": "error handling. So if there's like an"
+    },
+    {
+      "start": 330.479,
+      "end": 337.039,
+      "text": "ambiguous case so for example L k = 1"
+    },
+    {
+      "start": 337.039,
+      "end": 342.88,
+      "text": "and then like r k = 1"
+    },
+    {
+      "start": 342.88,
+      "end": 345.44,
+      "text": "and and if we do like this command"
+    },
+    {
+      "start": 345.44,
+      "end": 347.6,
+      "text": "for example it presents an ambiguous"
+    },
+    {
+      "start": 347.6,
+      "end": 349.52,
+      "text": "case"
+    },
+    {
+      "start": 349.52,
+      "end": 351.199,
+      "text": "or an ambiguous attribute. Yep. It'll"
+    },
+    {
+      "start": 351.199,
+      "end": 353.84,
+      "text": "handle that just fine. And if there's a"
+    },
+    {
+      "start": 353.84,
+      "end": 355.44,
+      "text": "schema mismatch for example it doesn't"
+    },
+    {
+      "start": 355.44,
+      "end": 357.36,
+      "text": "make sense to do a union it'll handle"
+    },
+    {
+      "start": 357.36,
+      "end": 359.759,
+      "text": "that as well. So we can quit out of the"
+    },
+    {
+      "start": 359.759,
+      "end": 362.639,
+      "text": "program just like that. And that is the"
+    },
+    {
+      "start": 362.639,
+      "end": 366.199,
+      "text": "demo of Relatum."
+    }
+  ]
+}

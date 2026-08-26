@@ -11,19 +11,24 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@crazygl/hero-vhs-product-screen": "0.1.1",
     "@remix-run/node": "^2.15.2",
     "@remix-run/react": "^2.15.2",
     "@remix-run/serve": "^2.15.2",
     "@vercel/speed-insights": "^2.0.0",
+    "computer-modern": "0.1.3",
+    "geist": "^1.7.2",
     "isbot": "^4.1.0",
     "motion": "^11.15.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.15.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
+    "@types/three": "^0.184.0",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "autoprefixer": "^10.4.19",

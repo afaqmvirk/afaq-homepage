@@ -1,0 +1,259 @@
+{
+  "cues": [
+    {
+      "start": 60,
+      "end": 60.64,
+      "text": "The genotype features are used to train"
+    },
+    {
+      "start": 60.64,
+      "end": 62.32,
+      "text": "the models while the metadata are used"
+    },
+    {
+      "start": 62.32,
+      "end": 65.28,
+      "text": "only for auditing. We tested the auditor"
+    },
+    {
+      "start": 65.28,
+      "end": 68.08,
+      "text": "on three tasks using data from the NCBI."
+    },
+    {
+      "start": 68.08,
+      "end": 71.6,
+      "text": "Eoline cyprofluxin, E.oli, Sephrioxone,"
+    },
+    {
+      "start": 71.6,
+      "end": 74.08,
+      "text": "and Salmonella with cyprloxicin. For"
+    },
+    {
+      "start": 74.08,
+      "end": 75.68,
+      "text": "each task, we trained rule-based"
+    },
+    {
+      "start": 75.68,
+      "end": 77.6,
+      "text": "logistic regression and random forest"
+    },
+    {
+      "start": 77.6,
+      "end": 80.4,
+      "text": "models. Under standard random train test"
+    },
+    {
+      "start": 80.4,
+      "end": 82.56,
+      "text": "splits, performance was strong. Logistic"
+    },
+    {
+      "start": 82.56,
+      "end": 85.52,
+      "text": "regression achieved F1 scores of 0.93"
+    },
+    {
+      "start": 85.52,
+      "end": 87.6,
+      "text": "across the three tasks. This shows that"
+    },
+    {
+      "start": 87.6,
+      "end": 89.6,
+      "text": "AMR genotype features contain strong"
+    },
+    {
+      "start": 89.6,
+      "end": 91.52,
+      "text": "predictive signal. However, the"
+    },
+    {
+      "start": 91.52,
+      "end": 93.119,
+      "text": "surveillance aware audits revealed a bit"
+    },
+    {
+      "start": 93.119,
+      "end": 95.04,
+      "text": "more of a nuanced picture. The auditor"
+    },
+    {
+      "start": 95.04,
+      "end": 96.96,
+      "text": "tested performance using S&P cluster"
+    },
+    {
+      "start": 96.96,
+      "end": 98.72,
+      "text": "aware splits, country and location"
+    },
+    {
+      "start": 98.72,
+      "end": 100.88,
+      "text": "holdouts, source holdouts, and isolation"
+    },
+    {
+      "start": 100.88,
+      "end": 102.799,
+      "text": "type holdouts. These tests show that"
+    },
+    {
+      "start": 102.799,
+      "end": 104.64,
+      "text": "high random split performance did not"
+    },
+    {
+      "start": 104.64,
+      "end": 106.64,
+      "text": "necessarily always translate into stable"
+    },
+    {
+      "start": 106.64,
+      "end": 108.96,
+      "text": "performances across these contexts. The"
+    },
+    {
+      "start": 108.96,
+      "end": 111.439,
+      "text": "main weaknesses differ by task. E.coli"
+    },
+    {
+      "start": 111.439,
+      "end": 113.36,
+      "text": "with cyproloxisin was most sensitive to"
+    },
+    {
+      "start": 113.36,
+      "end": 115.68,
+      "text": "isolation type hold out. E.coli with"
+    },
+    {
+      "start": 115.68,
+      "end": 117.6,
+      "text": "septrixone was sensitive to country and"
+    },
+    {
+      "start": 117.6,
+      "end": 119.68,
+      "text": "isolation type hold out and salmonella"
+    },
+    {
+      "start": 119.68,
+      "end": 121.36,
+      "text": "with cyprloxxyin showed the largest"
+    },
+    {
+      "start": 121.36,
+      "end": 124,
+      "text": "instability over S&P cluster aware and"
+    },
+    {
+      "start": 124,
+      "end": 126.96,
+      "text": "country held out evaluation."
+    },
+    {
+      "start": 126.96,
+      "end": 129.2,
+      "text": "We also found out that a could remain"
+    },
+    {
+      "start": 129.2,
+      "end": 131.52,
+      "text": "high even when F1 dropped. This means"
+    },
+    {
+      "start": 131.52,
+      "end": 133.2,
+      "text": "the model could still rank isolates"
+    },
+    {
+      "start": 133.2,
+      "end": 134.959,
+      "text": "reasonably well, but its classification"
+    },
+    {
+      "start": 134.959,
+      "end": 136.959,
+      "text": "threshold did not always transfer across"
+    },
+    {
+      "start": 136.959,
+      "end": 138.8,
+      "text": "different surveillance settings."
+    },
+    {
+      "start": 138.8,
+      "end": 140.72,
+      "text": "Overall, our product shows that AMR"
+    },
+    {
+      "start": 140.72,
+      "end": 142.319,
+      "text": "prediction models should not only be"
+    },
+    {
+      "start": 142.319,
+      "end": 144.72,
+      "text": "evaluated with random test train splits,"
+    },
+    {
+      "start": 144.72,
+      "end": 146.08,
+      "text": "and that our auditor provides a"
+    },
+    {
+      "start": 146.08,
+      "end": 147.84,
+      "text": "reproducible workflow for reporting"
+    },
+    {
+      "start": 147.84,
+      "end": 150.16,
+      "text": "model performance, subgroup reliability,"
+    },
+    {
+      "start": 150.16,
+      "end": 151.84,
+      "text": "metadata completeness, and warning"
+    },
+    {
+      "start": 151.84,
+      "end": 155.12,
+      "text": "flags. In conclusion, across three AMR"
+    },
+    {
+      "start": 155.12,
+      "end": 156.56,
+      "text": "prediction tasks, random split"
+    },
+    {
+      "start": 156.56,
+      "end": 158.48,
+      "text": "performance was consistently high, but"
+    },
+    {
+      "start": 158.48,
+      "end": 160,
+      "text": "surveillance aware auditing revealed"
+    },
+    {
+      "start": 160,
+      "end": 162.08,
+      "text": "task specific weaknesses that aggregate"
+    },
+    {
+      "start": 162.08,
+      "end": 164.08,
+      "text": "metrics alone would have missed. Thank"
+    },
+    {
+      "start": 164.08,
+      "end": 166.64,
+      "text": "you."
+    }
+  ]
+}

@@ -1,0 +1,849 @@
+{
+  "cues": [
+    {
+      "start": 150,
+      "end": 152.8,
+      "text": "his retirement from politics. that"
+    },
+    {
+      "start": 152.8,
+      "end": 155.599,
+      "text": "was Lester B. Pearson cuz I wrote the"
+    },
+    {
+      "start": 155.599,
+      "end": 157.84,
+      "text": "review for this. We'll move on to the"
+    },
+    {
+      "start": 157.84,
+      "end": 159.68,
+      "text": "next question. We all know what our team"
+    },
+    {
+      "start": 159.68,
+      "end": 161.28,
+      "text": "name is. The Ravens. This is a type"
+    },
+    {
+      "start": 161.28,
+      "end": 163.04,
+      "text": "question. But what is the name of our"
+    },
+    {
+      "start": 163.04,
+      "end": 165.48,
+      "text": "mascot? Well, it is"
+    },
+    {
+      "start": 165.48,
+      "end": 168.599,
+      "text": "doc Rodney"
+    },
+    {
+      "start": 168.599,
+      "end": 172.08,
+      "text": "the awards usual points. you know,"
+    },
+    {
+      "start": 172.08,
+      "end": 175.44,
+      "text": "let's say we don't maybe it was founded"
+    },
+    {
+      "start": 175.44,
+      "end": 180.56,
+      "text": "in 1942. Let's put the wrong answer"
+    },
+    {
+      "start": 181.879,
+      "end": 184.08,
+      "text": "195. As we can see, we got that one"
+    },
+    {
+      "start": 184.08,
+      "end": 186.56,
+      "text": "wrong. and we don't get any pointer"
+    },
+    {
+      "start": 186.56,
+      "end": 190.4,
+      "text": "there. We have one more here. What giant"
+    },
+    {
+      "start": 190.4,
+      "end": 192.879,
+      "text": "do both have common? Maybe you know this"
+    },
+    {
+      "start": 192.879,
+      "end": 194.56,
+      "text": "one, but maybe you don't. But the answer"
+    },
+    {
+      "start": 194.56,
+      "end": 196.64,
+      "text": "is that they're both named after bodies"
+    },
+    {
+      "start": 196.64,
+      "end": 199.04,
+      "text": "of water. We did pretty well in that"
+    },
+    {
+      "start": 199.04,
+      "end": 202,
+      "text": "coup. We got a score of 3,250, but it"
+    },
+    {
+      "start": 202,
+      "end": 205.28,
+      "text": "also shows a leaderboard of how we"
+    },
+    {
+      "start": 205.28,
+      "end": 207.36,
+      "text": "did. We got third place based on"
+    },
+    {
+      "start": 207.36,
+      "end": 209.28,
+      "text": "everyone else who has played this game."
+    },
+    {
+      "start": 209.28,
+      "end": 210.959,
+      "text": "You know, guest 2, for example, got"
+    },
+    {
+      "start": 210.959,
+      "end": 214.48,
+      "text": "3,700. guest four got 3500. And that"
+    },
+    {
+      "start": 214.48,
+      "end": 217.599,
+      "text": "just shows our score at the end. So we"
+    },
+    {
+      "start": 217.599,
+      "end": 221.92,
+      "text": "can go back and we can actually we're"
+    },
+    {
+      "start": 221.92,
+      "end": 224.08,
+      "text": "going to log out of here and then log in"
+    },
+    {
+      "start": 224.08,
+      "end": 226.08,
+      "text": "as an administrator who has some"
+    },
+    {
+      "start": 226.08,
+      "end": 228.879,
+      "text": "elevated privileges. So I'm going to log"
+    },
+    {
+      "start": 228.879,
+      "end": 233.28,
+      "text": "in as admin one and the password I"
+    },
+    {
+      "start": 233.28,
+      "end": 235.319,
+      "text": "believe was admin"
+    },
+    {
+      "start": 235.319,
+      "end": 239.2,
+      "text": "pass. Spelled that wrong. Admin pass."
+    },
+    {
+      "start": 239.2,
+      "end": 242.239,
+      "text": "There we go. And we see some elevated"
+    },
+    {
+      "start": 242.239,
+      "end": 245.159,
+      "text": "privileges here. we are allowed to"
+    },
+    {
+      "start": 245.159,
+      "end": 248.64,
+      "text": "edit any quiz that we've made ourselves."
+    },
+    {
+      "start": 248.64,
+      "end": 250.959,
+      "text": "So if we're the author admin one"
+    },
+    {
+      "start": 250.959,
+      "end": 253.12,
+      "text": "we're allowed to edit it. We also have"
+    },
+    {
+      "start": 253.12,
+      "end": 257.04,
+      "text": "the privilege to delete any other you"
+    },
+    {
+      "start": 257.04,
+      "end": 259.04,
+      "text": "know games including ones we haven't"
+    },
+    {
+      "start": 259.04,
+      "end": 261.68,
+      "text": "made. There's also an admin console here"
+    },
+    {
+      "start": 261.68,
+      "end": 264.199,
+      "text": "and if we log"
+    },
+    {
+      "start": 264.199,
+      "end": 267.12,
+      "text": "out for instance we can't see this list"
+    },
+    {
+      "start": 267.12,
+      "end": 269.759,
+      "text": "shows the users and all of the results"
+    },
+    {
+      "start": 269.759,
+      "end": 272.16,
+      "text": "of every game. If we log out of here and"
+    },
+    {
+      "start": 272.16,
+      "end": 274.759,
+      "text": "then try to access"
+    },
+    {
+      "start": 274.759,
+      "end": 278.16,
+      "text": "admin, we'll get a forbidden error. So,"
+    },
+    {
+      "start": 278.16,
+      "end": 280.16,
+      "text": "you know, depends even if we're a"
+    },
+    {
+      "start": 280.16,
+      "end": 282.479,
+      "text": "guest, it should show the same"
+    },
+    {
+      "start": 282.479,
+      "end": 285.04,
+      "text": "behavior. So, in terms of you use cases"
+    },
+    {
+      "start": 285.04,
+      "end": 287.52,
+      "text": "for this application, you both have the"
+    },
+    {
+      "start": 287.52,
+      "end": 290.32,
+      "text": "ability to play trivia games. and"
+    },
+    {
+      "start": 290.32,
+      "end": 292.08,
+      "text": "that can be great for like hosting"
+    },
+    {
+      "start": 292.08,
+      "end": 294.88,
+      "text": "trivia sessions. But if you're maybe a"
+    },
+    {
+      "start": 294.88,
+      "end": 296.479,
+      "text": "teacher and wanted to create your own"
+    },
+    {
+      "start": 296.479,
+      "end": 298.88,
+      "text": "games, well, let's log back in into a"
+    },
+    {
+      "start": 298.88,
+      "end": 301.44,
+      "text": "guest account and show this other use"
+    },
+    {
+      "start": 301.44,
+      "end": 303.68,
+      "text": "case of being able to create your own"
+    },
+    {
+      "start": 303.68,
+      "end": 305.24,
+      "text": "games as"
+    },
+    {
+      "start": 305.24,
+      "end": 307.68,
+      "text": "well. So, let's say we're a teacher and"
+    },
+    {
+      "start": 307.68,
+      "end": 309.84,
+      "text": "instead of just hosting trivia, we"
+    },
+    {
+      "start": 309.84,
+      "end": 311.52,
+      "text": "wanted to create our own trivia or even"
+    },
+    {
+      "start": 311.52,
+      "end": 313.44,
+      "text": "edit one. All the credit actions are on"
+    },
+    {
+      "start": 313.44,
+      "end": 316.08,
+      "text": "here. We can create one and move on to"
+    },
+    {
+      "start": 316.08,
+      "end": 321.56,
+      "text": "the creator. So, we'll call this demo"
+    },
+    {
+      "start": 321.56,
+      "end": 324.56,
+      "text": "quiz and we'll put in a description of"
+    },
+    {
+      "start": 324.56,
+      "end": 328.08,
+      "text": "this is a demo quiz. Who would have"
+    },
+    {
+      "start": 328.08,
+      "end": 329.52,
+      "text": "thought it? And we can change the"
+    },
+    {
+      "start": 329.52,
+      "end": 330.8,
+      "text": "category to whatever you want. Let's do"
+    },
+    {
+      "start": 330.8,
+      "end": 333.68,
+      "text": "math. We're maybe maybe a math teacher."
+    },
+    {
+      "start": 333.68,
+      "end": 336.08,
+      "text": "And what we can do here, what I've"
+    },
+    {
+      "start": 336.08,
+      "end": 340,
+      "text": "implemented is a question generator. So,"
+    },
+    {
+      "start": 340,
+      "end": 342,
+      "text": "you can create your own questions here."
+    },
+    {
+      "start": 342,
+      "end": 344.72,
+      "text": "You can the fields change depending"
+    },
+    {
+      "start": 344.72,
+      "end": 347.44,
+      "text": "on what kind of question it is. But"
+    },
+    {
+      "start": 347.44,
+      "end": 350.08,
+      "text": "let's say you don't feel like writing"
+    },
+    {
+      "start": 350.08,
+      "end": 352.639,
+      "text": "your own questions. What you can do is"
+    },
+    {
+      "start": 352.639,
+      "end": 357.199,
+      "text": "I've implemented here an API call to"
+    },
+    {
+      "start": 357.199,
+      "end": 360.16,
+      "text": "open trivia database. So this is an API"
+    },
+    {
+      "start": 360.16,
+      "end": 362.24,
+      "text": "call. it's a public content API."
+    },
+    {
+      "start": 362.24,
+      "end": 363.759,
+      "text": "Doesn't need an API key or anything like"
+    },
+    {
+      "start": 363.759,
+      "end": 366.479,
+      "text": "that, but it gives me a lot of 492"
+    },
+    {
+      "start": 366.479,
+      "end": 368.96,
+      "text": "errors. So I got to slow down the rate."
+    },
+    {
+      "start": 368.96,
+      "end": 370.8,
+      "text": "There's like a manual timer in here like"
+    },
+    {
+      "start": 370.8,
+      "end": 373.28,
+      "text": "every 7,000 seconds there's a cool down"
+    },
+    {
+      "start": 373.28,
+      "end": 377.759,
+      "text": "to prevent it from like making those 429"
+    },
+    {
+      "start": 377.759,
+      "end": 380.319,
+      "text": "errors. So, we're going to generate"
+    },
+    {
+      "start": 380.319,
+      "end": 382.16,
+      "text": "that. We can generate the question and"
+    },
+    {
+      "start": 382.16,
+      "end": 385.28,
+      "text": "it is automatically going to populate"
+    },
+    {
+      "start": 385.28,
+      "end": 390,
+      "text": "once it loads. There we go. That is a"
+    },
+    {
+      "start": 390,
+      "end": 391.6,
+      "text": "difficult question. Actually, not too"
+    },
+    {
+      "start": 391.6,
+      "end": 394,
+      "text": "hard once you think about it. so, we"
+    },
+    {
+      "start": 394,
+      "end": 396.24,
+      "text": "have this. We can add a new question. We"
+    },
+    {
+      "start": 396.24,
+      "end": 398.319,
+      "text": "can go multi select and generate a new"
+    },
+    {
+      "start": 398.319,
+      "end": 400.4,
+      "text": "question from here. What's the<unk> of"
+    },
+    {
+      "start": 400.4,
+      "end": 403.68,
+      "text": "49? It is 7. And the way this works is"
+    },
+    {
+      "start": 403.68,
+      "end": 406.24,
+      "text": "you put the so for multi select you"
+    },
+    {
+      "start": 406.24,
+      "end": 407.68,
+      "text": "put the correct answer first and the"
+    },
+    {
+      "start": 407.68,
+      "end": 410.319,
+      "text": "other options. But we can also do a"
+    },
+    {
+      "start": 410.319,
+      "end": 415.52,
+      "text": "numerical one. So you know what is 27"
+    },
+    {
+      "start": 415.52,
+      "end": 418.56,
+      "text": "+ 4 and the correct answer is 31. We can"
+    },
+    {
+      "start": 418.56,
+      "end": 421.36,
+      "text": "put a minimum of zero a maximum of like"
+    },
+    {
+      "start": 421.36,
+      "end": 423.759,
+      "text": "100. I don't know. And we can keep doing"
+    },
+    {
+      "start": 423.759,
+      "end": 426.16,
+      "text": "that."
+    },
+    {
+      "start": 426.16,
+      "end": 427.68,
+      "text": "The proof for the Chinese remainder"
+    },
+    {
+      "start": 427.68,
+      "end": 429.52,
+      "text": "theorem used a number theory was not"
+    },
+    {
+      "start": 429.52,
+      "end": 431.84,
+      "text": "developed by its first publisher Sunsu."
+    },
+    {
+      "start": 431.84,
+      "end": 434.639,
+      "text": "That is true. And let's generate"
+    },
+    {
+      "start": 434.639,
+      "end": 439.4,
+      "text": "another one. There's a that's the cool"
+    },
+    {
+      "start": 439.4,
+      "end": 441.599,
+      "text": "down. You can see that these are all"
+    },
+    {
+      "start": 441.599,
+      "end": 444,
+      "text": "based on math because our category was"
+    },
+    {
+      "start": 444,
+      "end": 447.759,
+      "text": "math. But if we change it to science or"
+    },
+    {
+      "start": 447.759,
+      "end": 450.24,
+      "text": "history, I don't know, history, why not?"
+    },
+    {
+      "start": 450.24,
+      "end": 452.16,
+      "text": "And we generate a new one. So, you can"
+    },
+    {
+      "start": 452.16,
+      "end": 455.84,
+      "text": "see I even duplicate it there."
+    },
+    {
+      "start": 457.039,
+      "end": 459.36,
+      "text": "there's now a history question which"
+    },
+    {
+      "start": 459.36,
+      "end": 460.72,
+      "text": "is kind of nice. And if we want to get"
+    },
+    {
+      "start": 460.72,
+      "end": 462.479,
+      "text": "rid of these, we can delete them as"
+    },
+    {
+      "start": 462.479,
+      "end": 463.8,
+      "text": "well."
+    },
+    {
+      "start": 463.8,
+      "end": 467,
+      "text": "But once we save that,"
+    },
+    {
+      "start": 467,
+      "end": 471.039,
+      "text": "we go back and we see our demo quiz"
+    },
+    {
+      "start": 471.039,
+      "end": 472.96,
+      "text": "and we can play that. We can edit it. We"
+    },
+    {
+      "start": 472.96,
+      "end": 476.24,
+      "text": "can edit anything that we've"
+    },
+    {
+      "start": 476.919,
+      "end": 478.96,
+      "text": "authored. You know, let's say how many"
+    },
+    {
+      "start": 478.96,
+      "end": 480.479,
+      "text": "Harry Potter movies are there? Let's say"
+    },
+    {
+      "start": 480.479,
+      "end": 482.319,
+      "text": "there's nine Harry Potter movies. you"
+    },
+    {
+      "start": 482.319,
+      "end": 483.759,
+      "text": "know, we're spreading misinformation"
+    },
+    {
+      "start": 483.759,
+      "end": 486.24,
+      "text": "over the internet. And there we go."
+    },
+    {
+      "start": 486.24,
+      "end": 487.479,
+      "text": "it should"
+    },
+    {
+      "start": 487.479,
+      "end": 490,
+      "text": "update. Where is it? Right here. Nine"
+    },
+    {
+      "start": 490,
+      "end": 491.919,
+      "text": "Harry Potter movies. We can always"
+    },
+    {
+      "start": 491.919,
+      "end": 495,
+      "text": "delete our own"
+    },
+    {
+      "start": 495,
+      "end": 497.56,
+      "text": "quizzes. Just like"
+    },
+    {
+      "start": 497.56,
+      "end": 500.4,
+      "text": "that. But even as a guest, we still"
+    },
+    {
+      "start": 500.4,
+      "end": 502.56,
+      "text": "can't access any admin privileges,"
+    },
+    {
+      "start": 502.56,
+      "end": 504.4,
+      "text": "right? It's still forbidden even as a"
+    },
+    {
+      "start": 504.4,
+      "end": 505.639,
+      "text": "registered"
+    },
+    {
+      "start": 505.639,
+      "end": 509.36,
+      "text": "user. So, that should hit all the"
+    },
+    {
+      "start": 509.36,
+      "end": 511.44,
+      "text": "requirements. we can log into the"
+    },
+    {
+      "start": 511.44,
+      "end": 513.279,
+      "text": "application as a guest or as an admin or"
+    },
+    {
+      "start": 513.279,
+      "end": 516.159,
+      "text": "even not as a user. we can create a"
+    },
+    {
+      "start": 516.159,
+      "end": 519.44,
+      "text": "new guest. We can sign in as an admin"
+    },
+    {
+      "start": 519.44,
+      "end": 522.24,
+      "text": "level user. We have the public API which"
+    },
+    {
+      "start": 522.24,
+      "end": 523.959,
+      "text": "is our"
+    },
+    {
+      "start": 523.959,
+      "end": 528.08,
+      "text": "open trivia database. And we have"
+    },
+    {
+      "start": 528.08,
+      "end": 530.08,
+      "text": "it's like a single page web app. You can"
+    },
+    {
+      "start": 530.08,
+      "end": 533.279,
+      "text": "navigate to any other point just by"
+    },
+    {
+      "start": 533.279,
+      "end": 534.64,
+      "text": "you know clicking on buttons and"
+    },
+    {
+      "start": 534.64,
+      "end": 536.64,
+      "text": "whatnot, right? You can launch the quiz"
+    },
+    {
+      "start": 536.64,
+      "end": 539.12,
+      "text": "through here, play it. we're not"
+    },
+    {
+      "start": 539.12,
+      "end": 541.44,
+      "text": "going to but you can play around create"
+    },
+    {
+      "start": 541.44,
+      "end": 543.839,
+      "text": "your own quizzes if you want and uses"
+    },
+    {
+      "start": 543.839,
+      "end": 545.519,
+      "text": "template rendering. So we have all these"
+    },
+    {
+      "start": 545.519,
+      "end": 548.399,
+      "text": "handlebars that take in you know"
+    },
+    {
+      "start": 548.399,
+      "end": 550.56,
+      "text": "these pre-filled values and it's not"
+    },
+    {
+      "start": 550.56,
+      "end": 554.64,
+      "text": "just generated with how do you use"
+    },
+    {
+      "start": 554.64,
+      "end": 557.68,
+      "text": "with JavaScript it uses other stuff too"
+    },
+    {
+      "start": 557.68,
+      "end": 559.519,
+      "text": "but there is some JavaScript in there"
+    },
+    {
+      "start": 559.519,
+      "end": 561.8,
+      "text": "just for like maybe CRUD actions or"
+    },
+    {
+      "start": 561.8,
+      "end": 566,
+      "text": "whatnot. and yeah, in terms of that"
+    },
+    {
+      "start": 566,
+      "end": 568.72,
+      "text": "use cases, once again, there's a bunch"
+    },
+    {
+      "start": 568.72,
+      "end": 571.76,
+      "text": "of them. And you know, creating"
+    },
+    {
+      "start": 571.76,
+      "end": 574.08,
+      "text": "trivia, playing trivia, if you want to"
+    },
+    {
+      "start": 574.08,
+      "end": 576.16,
+      "text": "have like bar trivia or you want to"
+    },
+    {
+      "start": 576.16,
+      "end": 577.839,
+      "text": "create stuff for your students or you"
+    },
+    {
+      "start": 577.839,
+      "end": 579.76,
+      "text": "want to do like work training and have"
+    },
+    {
+      "start": 579.76,
+      "end": 581.76,
+      "text": "those, there is a bunch of different"
+    },
+    {
+      "start": 581.76,
+      "end": 584.68,
+      "text": "things you can do between playing and"
+    },
+    {
+      "start": 584.68,
+      "end": 587.12,
+      "text": "creating. Yeah, that covers it. Thank"
+    },
+    {
+      "start": 587.12,
+      "end": 591.36,
+      "text": "you for listening and watching."
+    }
+  ]
+}

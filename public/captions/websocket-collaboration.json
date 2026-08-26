@@ -1,0 +1,79 @@
+{
+  "cues": [
+    {
+      "start": 20,
+      "end": 20.64,
+      "text": "script has also been added to socket"
+    },
+    {
+      "start": 20.64,
+      "end": 24.039,
+      "text": "like to the HTML file we can even check"
+    },
+    {
+      "start": 24.039,
+      "end": 28.519,
+      "text": "our keyboard handlers to see that it"
+    },
+    {
+      "start": 28.519,
+      "end": 31.039,
+      "text": "has been the xht P requests have been"
+    },
+    {
+      "start": 31.039,
+      "end": 34.96,
+      "text": "replaced with the socket data and the"
+    },
+    {
+      "start": 34.96,
+      "end": 37.92,
+      "text": "client side socket has been"
+    },
+    {
+      "start": 37.92,
+      "end": 41.12,
+      "text": "created in wherever it is where is it"
+    },
+    {
+      "start": 41.12,
+      "end": 42,
+      "text": "where is"
+    },
+    {
+      "start": 42,
+      "end": 45.039,
+      "text": "it it's in here somewhere oh yeah at the"
+    },
+    {
+      "start": 45.039,
+      "end": 49.32,
+      "text": "very top here canvas with"
+    },
+    {
+      "start": 49.399,
+      "end": 52.76,
+      "text": ".js and as we can see we can take a look"
+    },
+    {
+      "start": 52.76,
+      "end": 55.8,
+      "text": "at the actual program"
+    },
+    {
+      "start": 55.8,
+      "end": 59.519,
+      "text": "itself and we can see that it persists"
+    },
+    {
+      "start": 59.519,
+      "end": 60.64,
+      "text": "over"
+    },
+    {
+      "start": 60.64,
+      "end": 64.64,
+      "text": "between multiple clients"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "cues": [
+    {
+      "start": 360,
+      "end": 361.6,
+      "text": "national badminton championships or"
+    },
+    {
+      "start": 361.6,
+      "end": 363.28,
+      "text": "like, you know, who played guard for"
+    },
+    {
+      "start": 363.28,
+      "end": 366.8,
+      "text": "Toronto in 1996, you know, very broad"
+    },
+    {
+      "start": 366.8,
+      "end": 368.88,
+      "text": "spectrum of possible questions that we"
+    },
+    {
+      "start": 368.88,
+      "end": 372.72,
+      "text": "can see here, right? So, in comes"
+    },
+    {
+      "start": 372.72,
+      "end": 375.28,
+      "text": "Spider, which is a lot more complex. is"
+    },
+    {
+      "start": 375.28,
+      "end": 378.319,
+      "text": "cross domain completely redefineses text"
+    },
+    {
+      "start": 378.319,
+      "end": 380.319,
+      "text": "to SQL because it has thousands of"
+    },
+    {
+      "start": 380.319,
+      "end": 383.28,
+      "text": "questions across like 200 databases and"
+    },
+    {
+      "start": 383.28,
+      "end": 385.36,
+      "text": "each with their own schema. You have"
+    },
+    {
+      "start": 385.36,
+      "end": 388,
+      "text": "much more complex SQL queries involving"
+    },
+    {
+      "start": 388,
+      "end": 390.479,
+      "text": "like joins aggregations using group by"
+    },
+    {
+      "start": 390.479,
+      "end": 394.08,
+      "text": "nested sub queries set operations."
+    },
+    {
+      "start": 394.08,
+      "end": 396.72,
+      "text": "you know this requires models to adapt"
+    },
+    {
+      "start": 396.72,
+      "end": 399.6,
+      "text": "to new schemas just as you would in real"
+    },
+    {
+      "start": 399.6,
+      "end": 401.039,
+      "text": "life. And when this was first introduced"
+    },
+    {
+      "start": 401.039,
+      "end": 403.919,
+      "text": "in 2018 by Yale, the best models"
+    },
+    {
+      "start": 403.919,
+      "end": 406.72,
+      "text": "would only get around a 12% exact match."
+    },
+    {
+      "start": 406.72,
+      "end": 409.44,
+      "text": "So it was very challenging at the time."
+    },
+    {
+      "start": 409.44,
+      "end": 411.199,
+      "text": "And I say at the time cuz we'll see in a"
+    },
+    {
+      "start": 411.199,
+      "end": 413.44,
+      "text": "bit what's happened now. But it has"
+    },
+    {
+      "start": 413.44,
+      "end": 416.24,
+      "text": "driven, you know, a lot of huge research"
+    },
+    {
+      "start": 416.24,
+      "end": 418.72,
+      "text": "progress with this very vast data set"
+    },
+    {
+      "start": 418.72,
+      "end": 420,
+      "text": "that models were able to train in."
+    }
+  ]
+}
