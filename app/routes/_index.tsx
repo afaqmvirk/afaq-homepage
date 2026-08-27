@@ -335,7 +335,11 @@ const rightSections: DirectorySection[] = [
       {
         label: "sih",
         href: "https://stupideas.com",
-        preview: "/previews/stupid-ideas.png",
+        preview: "/channels/sih-site-scroll.mp4",
+        poster: "/previews/stupid-ideas.png",
+        screenFit: "contain",
+        description:
+          "The website I built for the Stupid Ideas Hackathon community.",
         external: true,
       },
     ],
