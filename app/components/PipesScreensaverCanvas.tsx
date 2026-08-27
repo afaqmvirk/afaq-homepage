@@ -14,7 +14,9 @@ const BALL_RADIUS = PIPE_RADIUS * 1.5;
 const CAMERA_FOV = 38;
 const AMBIENT_CAMERA_DISTANCE = 14;
 const AMBIENT_CAMERA_NEAR = 0.05;
-const AMBIENT_GRID_STEP = 0.5;
+const AMBIENT_GRID_STEP = 0.75;
+const AMBIENT_GRID_EXTENT = 12;
+const AMBIENT_STRAIGHT_CHANCE = 0.68;
 const AMBIENT_PIPE_STEPS = 400;
 const AMBIENT_STEP_INTERVAL = 15;
 const AMBIENT_PIPE_START_DELAYS = [0, 450, 1100, 1900];
@@ -62,6 +64,10 @@ type ThreeModule = Pick<
 >;
 type FrameCanvas = HTMLCanvasElement & { __crtFrameVersion?: number };
 type Batch = { mesh: InstancedMesh; revealTimes: number[] };
+type BatchGroup = {
+  batches: Batch[];
+  geometry: { dispose: () => void };
+};
 
 const glyphs: Record<string, P2[][]> = {
   A: [
@@ -190,6 +196,14 @@ function randomFromSeed(seed: number) {
   };
 }
 
+function createRandomSeed(previousSeed?: number) {
+  let seed: number;
+  do {
+    seed = Math.floor(Math.random() * 0x100000000) >>> 0;
+  } while (seed === previousSeed);
+  return seed;
+}
+
 function key(point: P3) {
   return point.join(",");
 }
@@ -210,8 +224,8 @@ function sameDirection(first: P3, second: P3) {
   );
 }
 
-function createAmbientPlan(): Plan {
-  const random = randomFromSeed(0xafac2026);
+function createAmbientPlan(seed: number): Plan {
+  const random = randomFromSeed(seed);
   const segments: Segment[] = [];
   const joints: Joint[] = [];
   const occupied = new Set<string>();
@@ -249,7 +263,9 @@ function createAmbientPlan(): Plan {
 
     for (let step = 0; step < AMBIENT_PIPE_STEPS; step += 1) {
       const candidates = [...directions].sort(() => random() - 0.5);
-      if (step > 0 && random() < 0.54) candidates.unshift(heading);
+      if (step > 0 && random() < AMBIENT_STRAIGHT_CHANCE) {
+        candidates.unshift(heading);
+      }
       let next: P3 | undefined;
       let nextHeading: P3 | undefined;
 
@@ -267,7 +283,9 @@ function createAmbientPlan(): Plan {
           position[2] + candidate[2] * AMBIENT_GRID_STEP,
         ];
         if (
-          proposed.some((coordinate) => Math.abs(coordinate) > 10) ||
+          proposed.some(
+            (coordinate) => Math.abs(coordinate) > AMBIENT_GRID_EXTENT,
+          ) ||
           occupied.has(key(proposed))
         ) {
           continue;
@@ -549,6 +567,11 @@ function reveal(batches: Batch[], time: number) {
   }
 }
 
+function disposeBatchGroup(scene: Scene, group: BatchGroup) {
+  for (const batch of group.batches) scene.remove(batch.mesh);
+  group.geometry.dispose();
+}
+
 function createDissolve(THREE: ThreeModule) {
   const columns = 32;
   const rows = 24;
@@ -622,17 +645,18 @@ function startPipesScreensaver(canvas: FrameCanvas, THREE: ThreeModule) {
       AMBIENT_CAMERA_NEAR,
       100000,
     );
-    const ambientPlan = createAmbientPlan();
+    let ambientSeed = createRandomSeed();
+    const ambientPlan = createAmbientPlan(ambientSeed);
     const letterPlan = createLetterPlan();
     const ambientMaterials = createMaterials(THREE, ambientColors);
     const nameMaterials = createMaterials(THREE, letterColors);
-    const ambientSegments = addSegmentBatches(
+    let ambientSegments = addSegmentBatches(
       THREE,
       scene,
       ambientPlan.segments,
       ambientMaterials,
     );
-    const ambientJoints = addJointBatches(
+    let ambientJoints = addJointBatches(
       THREE,
       scene,
       ambientPlan.joints,
@@ -663,6 +687,7 @@ function startPipesScreensaver(canvas: FrameCanvas, THREE: ThreeModule) {
     let frame = 0;
     let lastFrame = 0;
     let colorCycle = -1;
+    let planCycle = 0;
     const draw = (now: number) => {
       frame = requestAnimationFrame(draw);
       if (now - lastFrame < FRAME_INTERVAL) return;
@@ -676,6 +701,26 @@ function startPipesScreensaver(canvas: FrameCanvas, THREE: ThreeModule) {
       if (cycle !== colorCycle) {
         updateAmbientMaterialColors(ambientMaterials, cycle);
         colorCycle = cycle;
+      }
+
+      if (cycle !== planCycle) {
+        disposeBatchGroup(scene, ambientSegments);
+        disposeBatchGroup(scene, ambientJoints);
+        ambientSeed = createRandomSeed(ambientSeed);
+        const nextAmbientPlan = createAmbientPlan(ambientSeed);
+        ambientSegments = addSegmentBatches(
+          THREE,
+          scene,
+          nextAmbientPlan.segments,
+          ambientMaterials,
+        );
+        ambientJoints = addJointBatches(
+          THREE,
+          scene,
+          nextAmbientPlan.joints,
+          ambientMaterials,
+        );
+        planCycle = cycle;
       }
 
       if (showingName) {
@@ -719,8 +764,8 @@ function startPipesScreensaver(canvas: FrameCanvas, THREE: ThreeModule) {
     frame = requestAnimationFrame(draw);
     return () => {
       cancelAnimationFrame(frame);
-      ambientSegments.geometry.dispose();
-      ambientJoints.geometry.dispose();
+      disposeBatchGroup(scene, ambientSegments);
+      disposeBatchGroup(scene, ambientJoints);
       nameSegments.geometry.dispose();
       nameJoints.geometry.dispose();
       ambientMaterials.forEach((material) => material.dispose());

@@ -23,8 +23,7 @@ const noiseOnlyCrtTransition = `float phase = clamp(u_turnOnPhase, 0.0, 1.0);
 			pixel.yx * vec2(0.7549, 0.5697) + vec2(frame * 131.0, -frame * 67.0)
 		);
 		float staticNoise = fract(fineNoise + crossNoise * 0.61803398875);
-		float reveal = smoothstep(0.68, 1.0, phase);
-		col = mix(vec3(staticNoise) * tubeMask, col, reveal);
+		col = vec3(staticNoise) * tubeMask;
 	}`;
 
 const mobileCrtLayout = `const CRT_PANEL_SEAM_X = 0.2585562765598297;
@@ -466,6 +465,71 @@ function createCrtDialProjectionState() {
     };
 }
 
+function createCrtScreenProjectionState() {
+    return {
+        lastPublishedAt: -Infinity,
+        values: null,
+        corners: Array.from({ length: 8 }, () => new THREE.Vector3()),
+    };
+}
+
+function publishCrtScreenBounds(canvas, screenMesh, camera, state, elapsed, width, height) {
+    const host = canvas?.closest?.('.crt-stage');
+    if (!host || !screenMesh || !camera || !state)
+        return;
+    if (width <= 0 || height <= 0 || elapsed - state.lastPublishedAt < 1 / 24)
+        return;
+    const geometry = screenMesh.geometry;
+    if (!geometry)
+        return;
+    geometry.computeBoundingBox();
+    const bounds = geometry.boundingBox;
+    if (!bounds)
+        return;
+    state.lastPublishedAt = elapsed;
+    screenMesh.updateWorldMatrix(true, false);
+    camera.updateWorldMatrix(true, false);
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    let cornerIndex = 0;
+    for (const x of [bounds.min.x, bounds.max.x]) {
+        for (const y of [bounds.min.y, bounds.max.y]) {
+            for (const z of [bounds.min.z, bounds.max.z]) {
+                const corner = state.corners[cornerIndex++]
+                    .set(x, y, z)
+                    .applyMatrix4(screenMesh.matrixWorld)
+                    .project(camera);
+                const projectedX = (corner.x * 0.5 + 0.5) * width;
+                const projectedY = (-corner.y * 0.5 + 0.5) * height;
+                minX = Math.min(minX, projectedX);
+                maxX = Math.max(maxX, projectedX);
+                minY = Math.min(minY, projectedY);
+                maxY = Math.max(maxY, projectedY);
+            }
+        }
+    }
+    if (![minX, maxX, minY, maxY].every(Number.isFinite))
+        return;
+    const screenWidth = Math.max(44, maxX - minX);
+    const screenHeight = Math.max(44, maxY - minY);
+    const horizontalInset = screenWidth * 0.20;
+    const verticalInset = screenHeight * 0.10;
+    const nextValues = {
+        x: ((minX + maxX) * 0.5).toFixed(2) + 'px',
+        y: ((minY + maxY) * 0.5).toFixed(2) + 'px',
+        width: Math.max(44, screenWidth - horizontalInset * 2).toFixed(2) + 'px',
+        height: Math.max(44, screenHeight - verticalInset * 2).toFixed(2) + 'px',
+    };
+    const previousValues = state.values;
+    for (const property of ['x', 'y', 'width', 'height']) {
+        if (!previousValues || previousValues[property] !== nextValues[property])
+            host.style.setProperty('--crt-screen-' + property, nextValues[property]);
+    }
+    state.values = nextValues;
+}
+
 function publishCrtDialPositions(canvas, sceneObj, camera, state, elapsed, width, height) {
     const host = canvas?.closest?.('.crt-stage');
     if (!host || !sceneObj || !camera || !state)
@@ -644,6 +708,60 @@ const crtCaptionCanvas = `function drawCrtCaptionCanvas(canvas, detail) {
     return true;
 }
 
+function drawCrtDescriptionCanvas(canvas, detail) {
+    const context = canvas.getContext('2d');
+    if (!context)
+        return false;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    const text = typeof detail?.text === 'string' ? detail.text.trim() : '';
+    if (!text)
+        return false;
+    const title = typeof detail?.title === 'string' ? detail.title.trim() : '';
+    const creationDate = typeof detail?.creationDate === 'string'
+        ? detail.creationDate.trim()
+        : '';
+    const maxWidth = canvas.width - 176;
+    const words = text.split(/\\s+/);
+    const lines = [];
+    let line = '';
+    context.save();
+    context.fillStyle = 'rgba(0, 0, 0, 0.94)';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.font = '600 39px Arial, sans-serif';
+    for (const word of words) {
+        const candidate = line ? line + ' ' + word : word;
+        if (!line || context.measureText(candidate).width <= maxWidth) {
+            line = candidate;
+        }
+        else {
+            lines.push(line);
+            line = word;
+        }
+    }
+    if (line)
+        lines.push(line);
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
+    context.fillStyle = '#ffffff';
+    context.font = '500 25px "Geist Pixel Square", monospace';
+    if (creationDate) {
+        context.textAlign = 'right';
+        context.fillText(creationDate, canvas.width - 88, 116);
+        context.textAlign = 'left';
+    }
+    context.font = '700 58px Arial, sans-serif';
+    context.fillText(title || 'Channel', 88, 202, maxWidth);
+    context.fillStyle = '#185dff';
+    context.fillRect(88, 236, 112, 8);
+    context.fillStyle = '#ffffff';
+    context.font = '600 39px Arial, sans-serif';
+    lines.slice(0, 5).forEach((descriptionLine, index) => {
+        context.fillText(descriptionLine, 88, 322 + index * 55, maxWidth);
+    });
+    context.restore();
+    return true;
+}
+
 function drawCrtChannelCanvas(canvas, channel, title, creationDate) {
     const context = canvas.getContext('2d');
     if (!context || !Number.isFinite(channel))
@@ -755,6 +873,8 @@ function createCrtAudioSystem() {
         noiseSource,
         staticGain,
         programCleanup: null,
+        programGain: null,
+        staticUntil: 0,
     };
 }
 
@@ -776,11 +896,20 @@ function burstCrtStatic(system) {
     if (!system)
         return;
     const now = system.context.currentTime;
+    const staticUntil = now + 0.58;
+    system.staticUntil = staticUntil;
     const gain = system.staticGain.gain;
     gain.cancelScheduledValues(now);
-    gain.setValueAtTime(Math.max(CRT_STATIC_IDLE_GAIN, gain.value), now);
-    gain.linearRampToValueAtTime(0.14, now + 0.018);
-    gain.exponentialRampToValueAtTime(CRT_STATIC_IDLE_GAIN, now + 0.58);
+    gain.setValueAtTime(0.14, now);
+    gain.setValueAtTime(0.14, staticUntil);
+    gain.setValueAtTime(CRT_STATIC_IDLE_GAIN, staticUntil + 0.001);
+    const programGain = system.programGain;
+    if (programGain) {
+        programGain.gain.cancelScheduledValues(now);
+        programGain.gain.setValueAtTime(0, now);
+        programGain.gain.setValueAtTime(0, staticUntil);
+        programGain.gain.setValueAtTime(0.92, staticUntil + 0.001);
+    }
 }
 
 function connectCrtProgramAudio(system, video) {
@@ -813,7 +942,15 @@ function connectCrtProgramAudio(system, video) {
     compressor.attack.value = 0.004;
     compressor.release.value = 0.16;
     const programGain = system.context.createGain();
-    programGain.gain.value = 0.92;
+    const now = system.context.currentTime;
+    if (system.staticUntil > now) {
+        programGain.gain.setValueAtTime(0, now);
+        programGain.gain.setValueAtTime(0, system.staticUntil);
+        programGain.gain.setValueAtTime(0.92, system.staticUntil + 0.001);
+    }
+    else {
+        programGain.gain.value = 0.92;
+    }
 
     source.connect(highpass);
     highpass.connect(lowShelf);
@@ -822,6 +959,7 @@ function connectCrtProgramAudio(system, video) {
     lowpass.connect(compressor);
     compressor.connect(programGain);
     programGain.connect(system.masterGain);
+    system.programGain = programGain;
 
     const cleanup = () => {
         [source, highpass, lowShelf, presence, lowpass, compressor, programGain]
@@ -833,6 +971,8 @@ function connectCrtProgramAudio(system, video) {
             });
         if (system.programCleanup === cleanup)
             system.programCleanup = null;
+        if (system.programGain === programGain)
+            system.programGain = null;
     };
     system.programCleanup = cleanup;
     return cleanup;
@@ -952,6 +1092,18 @@ uniform float u_haveCaption;`,
       .replace(
         "return texture2D(u_screenMedia, mediaUV).rgb;",
         `vec3 mediaColor = texture2D(u_screenMedia, mediaUV).rgb;
+	// Video sources receive a modest saturation/contrast lift. Keep this
+	// source-only so captions and interface overlays retain their own colors.
+	float mediaLum = dot(mediaColor, vec3(0.299, 0.587, 0.114));
+	mediaColor = mix(vec3(mediaLum), mediaColor, u_mediaGrade.x);
+	mediaColor = (mediaColor - 0.5) * u_mediaGrade.y + 0.5;
+	mediaColor = max(mediaColor, vec3(0.0));
+
+	// Compress only the source media's brightest values before captions and
+	// interface overlays are composited, preserving their existing treatment.
+	float sourcePeak = max(max(mediaColor.r, mediaColor.g), mediaColor.b);
+	float sourceHighlight = smoothstep(0.55, 1.0, sourcePeak);
+	mediaColor *= mix(1.0, 0.80, sourceHighlight);
 	if (u_haveCaption > 0.5) {
 		vec4 captionColor = texture2D(u_captionTexture, mediaUV);
 		mediaColor = mix(mediaColor, captionColor.rgb, captionColor.a);
@@ -978,17 +1130,6 @@ uniform float u_haveCaption;`,
 \tvec2 mediaUV = (contentUV - 0.5) * scale + 0.5;`,
       )
       .replace(
-        "\tcol.b = mix(col.b, col.b * 1.04, 0.5);",
-        `\tcol.b = mix(col.b, col.b * 1.04, 0.5);
-
-\t// YouTube video tends to arrive flatter than the highly saturated canvas
-\t// and PNG sources. Lift only video saturation/contrast so the rest of the
-\t// TV content keeps its existing grade.
-\tfloat mediaLum = dot(col, vec3(0.299, 0.587, 0.114));
-\tcol = mix(vec3(mediaLum), col, u_mediaGrade.x);
-\tcol = (col - 0.5) * u_mediaGrade.y + 0.5;`,
-      )
-      .replace(
         "            const om2 = offscreenMatRef.current;\n            if (om2) {",
         `            const om2 = offscreenMatRef.current;
             if (om2) {
@@ -1009,6 +1150,7 @@ uniform float u_haveCaption;`,
     const captionCanvasRef = React.useRef(null);
     const captionTextureRef = React.useRef(null);
     const captionDetailRef = React.useRef({});
+    const descriptionDetailRef = React.useRef({});
     const channelOverlayRef = React.useRef({ channel: null, title: '', creationDate: '', hideTimer: null });
     const volumeOverlayRef = React.useRef({ level: null, hideTimer: null });
     const screenBounceRef = React.useRef(null);
@@ -1029,6 +1171,7 @@ uniform float u_haveCaption;`,
     const crtDialCurrentRef = React.useRef({ channel: 0, volume: 0 });
     const crtDialAppliedRef = React.useRef({ channel: NaN, volume: NaN });
     const crtDialProjectionRef = React.useRef(createCrtDialProjectionState());
+    const crtScreenProjectionRef = React.useRef(createCrtScreenProjectionState());
     const canvasTextureVersionRef = React.useRef(-1);
     React.useEffect(() => {
         let system = null;
@@ -1115,26 +1258,43 @@ uniform float u_haveCaption;`,
                 texture.flipY = true;
                 captionTextureRef.current = texture;
             }
-            const hasCaption = drawCrtCaptionCanvas(canvas, captionDetailRef.current);
-            const channelOverlay = channelOverlayRef.current;
-            const hasChannel = drawCrtChannelCanvas(
-                canvas,
-                channelOverlay.channel,
-                channelOverlay.title,
-                channelOverlay.creationDate,
-            );
-            const hasVolume = drawCrtVolumeCanvas(canvas, volumeOverlayRef.current.level);
+            const hasDescription = Boolean(descriptionDetailRef.current?.text) &&
+                drawCrtDescriptionCanvas(canvas, descriptionDetailRef.current);
+            let hasCaption = false;
+            let hasChannel = false;
+            let hasVolume = false;
+            if (!hasDescription) {
+                hasCaption = drawCrtCaptionCanvas(canvas, captionDetailRef.current);
+                const channelOverlay = channelOverlayRef.current;
+                hasChannel = drawCrtChannelCanvas(
+                    canvas,
+                    channelOverlay.channel,
+                    channelOverlay.title,
+                    channelOverlay.creationDate,
+                );
+                hasVolume = drawCrtVolumeCanvas(canvas, volumeOverlayRef.current.level);
+            }
             texture.needsUpdate = true;
             const material = offscreenMatRef.current;
             if (material) {
                 material.uniforms.u_captionTexture.value = texture;
-                material.uniforms.u_haveCaption.value = hasCaption || hasChannel || hasVolume ? 1.0 : 0.0;
+                material.uniforms.u_haveCaption.value = hasDescription || hasCaption || hasChannel || hasVolume ? 1.0 : 0.0;
             }
             rtPrimedRef.current = false;
         };
         const handleCaptionChange = (event) => {
             captionDetailRef.current = event.detail ?? {};
             renderOverlay();
+        };
+        const handleDescriptionChange = (event) => {
+            const nextDetail = event.detail ?? {};
+            descriptionDetailRef.current = nextDetail;
+            renderOverlay();
+            const fontLoad = document.fonts?.load?.('500 25px "Geist Pixel Square"');
+            fontLoad?.then(() => {
+                if (descriptionDetailRef.current === nextDetail)
+                    renderOverlay();
+            }).catch(() => {});
         };
         const handleChannelOverlay = (event) => {
             const channel = Number(event.detail?.channel);
@@ -1177,10 +1337,12 @@ uniform float u_haveCaption;`,
             }, 3000);
         };
         window.addEventListener('crt-caption-change', handleCaptionChange);
+        window.addEventListener('crt-description-change', handleDescriptionChange);
         window.addEventListener('crt-channel-change', handleChannelOverlay);
         window.addEventListener('crt-volume-change', handleVolumeOverlay);
         return () => {
             window.removeEventListener('crt-caption-change', handleCaptionChange);
+            window.removeEventListener('crt-description-change', handleDescriptionChange);
             window.removeEventListener('crt-channel-change', handleChannelOverlay);
             window.removeEventListener('crt-volume-change', handleVolumeOverlay);
             if (channelOverlayRef.current.hideTimer !== null)
@@ -1313,6 +1475,29 @@ uniform float u_haveCaption;`,
         `${dynamicScreenBounce}    // Glitch scheduling — next-burst-time + active-envelope are CPU side`,
       )
       .replace(
+        `                g.burstUntil = g.elapsed + 0.15;
+                g.burstY = 0.15 + ((Math.sin(g.elapsed * 173.31) * 0.5) + 0.5) * 0.7;`,
+        `                const burstDuration = 0.18 + Math.random() * 0.06;
+                g.burstStartedAt = g.elapsed;
+                g.burstUntil = g.elapsed + burstDuration;
+                g.burstY = 0.2 + ((Math.sin(g.elapsed * 173.31) * 0.5) + 0.5) * 0.6;
+                const travelDirection = Math.sin(g.elapsed * 91.7) >= 0 ? 1 : -1;
+                g.burstTravelY = travelDirection * (0.08 + Math.random() * 0.08);`,
+      )
+      .replace(
+        `                const left = g.burstUntil - g.elapsed;
+                const window = 0.15;`,
+        `                const left = g.burstUntil - g.elapsed;
+                const window = Math.max(0.001, g.burstUntil - (g.burstStartedAt ?? g.burstUntil - 0.15));`,
+      )
+      .replace(
+        "            om.uniforms.u_glitchBandY.value = g.burstY;",
+        `            const travelWindow = Math.max(0.001, g.burstUntil - (g.burstStartedAt ?? g.burstUntil - 0.15));
+            const travelProgress = Math.max(0, Math.min(1, (g.elapsed - (g.burstStartedAt ?? g.elapsed)) / travelWindow));
+            const travelEase = 0.5 - 0.5 * Math.cos(Math.PI * travelProgress);
+            om.uniforms.u_glitchBandY.value = Math.max(0.12, Math.min(0.88, g.burstY + (g.burstTravelY ?? 0) * travelEase));`,
+      )
+      .replace(
         "        renderer.render(scene, camera);",
         `        updateScreenBounce(elapsed);
         const dialTarget = crtDialTargetRef.current;
@@ -1335,6 +1520,15 @@ uniform float u_haveCaption;`,
             modelObjRef.current,
             camera,
             crtDialProjectionRef.current,
+            elapsed,
+            size.width,
+            size.height,
+        );
+        publishCrtScreenBounds(
+            canvasRef.current,
+            screenMeshRef.current,
+            camera,
+            crtScreenProjectionRef.current,
             elapsed,
             size.width,
             size.height,
@@ -1377,7 +1571,8 @@ uniform float u_haveCaption;`,
         modelFitRef.current = null;
         crtDialGeometryRef.current = [];
         crtDialAppliedRef.current = { channel: NaN, volume: NaN };
-        crtDialProjectionRef.current = createCrtDialProjectionState();`,
+        crtDialProjectionRef.current = createCrtDialProjectionState();
+        crtScreenProjectionRef.current = createCrtScreenProjectionState();`,
       )
       .replace(
         "const targetYaw = reducedMotion ? 0 : -px * (3.0 * Math.PI / 180) * pStrength;",

@@ -128,10 +128,37 @@ body {
   --crt-volume-x: 90.5%;
   --crt-volume-y: 41%;
   --crt-volume-size: clamp(4rem, 9vw, 8rem);
+  --crt-screen-x: 43%;
+  --crt-screen-y: 48%;
+  --crt-screen-width: 63%;
+  --crt-screen-height: 57%;
 
   position: absolute;
   inset: 0 0 0 var(--crt-safe-left);
   overflow: hidden;
+}
+
+.crt-screen-description-trigger {
+  position: absolute;
+  z-index: 7;
+  top: var(--crt-screen-y);
+  left: var(--crt-screen-x);
+  width: var(--crt-screen-width);
+  height: var(--crt-screen-height);
+  appearance: none;
+  padding: 0;
+  border: 0;
+  border-radius: 9%;
+  outline: 0;
+  background: transparent;
+  cursor: help;
+  transform: translate(-50%, -50%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.crt-screen-description-trigger:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92),
+    inset 0 0 0 5px rgba(24, 93, 255, 0.78);
 }
 
 .crt-controls {

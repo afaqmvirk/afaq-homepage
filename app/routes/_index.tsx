@@ -22,11 +22,17 @@ import RetroSocialCanvases, {
 import ResumeTerminalCanvas, {
   RESUME_TERMINAL_MEDIA,
 } from "~/components/ResumeTerminalCanvas";
+import ShopifyAsciiCanvas, {
+  SHOPIFY_ASCII_MEDIA,
+} from "~/components/ShopifyAsciiCanvas";
 
 type DirectoryItem = {
   label: string;
   href: string;
   preview: string;
+  description?: string;
+  slideshow?: readonly string[];
+  screenFit?: "cover" | "contain";
   creationDate?: string;
   startAt?: number;
   endAt?: number;
@@ -44,6 +50,8 @@ const defaultPreview: DirectoryItem = {
   label: "Afaq Virk",
   href: "/",
   preview: HERO_PREVIEW_MEDIA,
+  description:
+    "This was the most recent version of my website until I updated it in late August 2026. Use the channel and volume knobs on the TV to explore further.",
   creationDate: "current",
 };
 
@@ -53,12 +61,23 @@ const tvChannels = [
     label: "3D pipes",
     href: "/",
     preview: PIPES_SCREENSAVER_MEDIA,
+    description: "This was just a cool screensaver.",
+    creationDate: "2026-08-26",
+  },
+  {
+    label: "Shopify ASCII",
+    href: "/",
+    preview: SHOPIFY_ASCII_MEDIA,
+    description:
+      "My internship at Shopify has lasted two years so far. I've worked on the Analytics and Financial Services teams, working on AI agents, RAG systems, and a whole bunch of other cool things.",
     creationDate: "2026-08-26",
   },
   {
     label: "Animation Project 1",
     href: "/",
     preview: "/channels/animation-project-1.mp4",
+    description:
+      'An assignment I submitted to my 10th grade Communications Technology class, with the assignment prompt being "a loading screen."',
     creationDate: "2022-01-10",
     startAt: 3,
   },
@@ -66,6 +85,8 @@ const tvChannels = [
     label: "Animation Project 2",
     href: "/",
     preview: "/channels/animation-project-2.mp4",
+    description:
+      '"Bee and Flower" was a submission to an assignment for my 10th grade media class, of "a character visiting three places."',
     creationDate: "2022-02-01",
     startAt: 3,
   },
@@ -73,6 +94,8 @@ const tvChannels = [
     label: "Text-to-SQL",
     href: "/",
     preview: "/channels/text-to-sql.mp4",
+    description:
+      "A lecture I gave to my COMP 3005 class on Text-to-SQL systems.",
     creationDate: "2025-11-30",
     startAt: 360,
     endAt: 420,
@@ -82,6 +105,7 @@ const tvChannels = [
     label: "AMR Surveillance Bias",
     href: "/",
     preview: "/channels/amr-surveillance-bias.mp4",
+    description: "A research paper I presented.",
     creationDate: "2026-06-27",
     startAt: 60,
     captionTrack: "/captions/amr-surveillance-bias.json",
@@ -90,6 +114,8 @@ const tvChannels = [
     label: "Balancing Chemical Equations",
     href: "/",
     preview: "/channels/chemical-equations.mp4",
+    description:
+      "Just another section of the 4000+ hours I've spent tutoring over the past six years.",
     creationDate: "2024-09-11",
     startAt: 30,
     captionTrack: "/captions/chemical-equations.json",
@@ -98,6 +124,8 @@ const tvChannels = [
     label: "Relatom",
     href: "/",
     preview: "/channels/relatom.mp4",
+    description:
+      'Relatom—a relational query language made up of "atomic" statements. Bonus project for COMP 3005.',
     creationDate: "-",
     startAt: 120,
     captionTrack: "/captions/relatom.json",
@@ -106,6 +134,7 @@ const tvChannels = [
     label: "WebSocket Collaboration",
     href: "/",
     preview: "/channels/websocket-collaboration.mp4",
+    description: "Another project for my COMP 2406 class.",
     creationDate: "-",
     startAt: 20,
     captionTrack: "/captions/websocket-collaboration.json",
@@ -114,13 +143,17 @@ const tvChannels = [
     label: "LC Games",
     href: "/",
     preview: "/channels/leetcode-games.mp4",
-    creationDate: "2025-01-28",
+    description:
+      "Challenge 1B of the LeetCode Games workshop I held in January 2026 at Carleton University. Each problem was intended to introduce students to algorithmic problem-solving. I put together some fun videos last-minute introducing each challenge.",
+    creationDate: "2026-01-28",
     startAt: 21,
   },
   {
     label: "PortalPants",
     href: "/",
     preview: "/channels/portalpants.mp4",
+    description:
+      'SpongeBob PortalPants was a submission to an assignment for my 10th grade media class, of "a character visiting three places."',
     creationDate: "2022-01-22",
     startAt: 25,
   },
@@ -128,6 +161,8 @@ const tvChannels = [
     label: "COMP2406B Final Project",
     href: "/",
     preview: "/channels/comp2406b-final-project.mp4",
+    description:
+      "A Kahoot! clone I built as a final project for my COMP 2406 Web Applications class.",
     creationDate: "2025-04-08",
     startAt: 150,
     captionTrack: "/captions/comp2406b-final-project.json",
@@ -136,13 +171,17 @@ const tvChannels = [
     label: "Krusty Kalkulations",
     href: "/",
     preview: "/channels/krusty-kalkulations.mp4",
-    creationDate: "2025-01-28",
+    description:
+      "Challenge 3 of the LeetCode Games workshop I held in January 2026 at Carleton University. Each problem was intended to introduce students to algorithmic problem-solving. I put together some fun videos last-minute introducing each challenge.",
+    creationDate: "2026-01-28",
     startAt: 17,
   },
   {
     label: "K.A.R.E.N.",
     href: "/",
     preview: "/channels/karen-demo.mp4",
+    description:
+      "uOttaHack 8 submission—programmed an AI assistant on an FPGA using Tcl and AMD Vivado, complete with a screensaver and brick-breaker game.",
     creationDate: "2026-01-18",
     startAt: 3,
   },
@@ -150,6 +189,8 @@ const tvChannels = [
     label: "UCDSB Board Meeting",
     href: "/",
     preview: "/channels/ucdsb-board-meeting.mp4",
+    description:
+      "An excerpt of my time as a trustee for the UCDSB, where I advocated on topics like STEM in classrooms, the introduction of AI in classrooms, and more.",
     creationDate: "2024-03-06",
     captionTrack: "/captions/ucdsb-board-meeting.json",
   },
@@ -157,10 +198,36 @@ const tvChannels = [
     label: "Awards Ceremony",
     href: "/",
     preview: "/channels/awards-ceremony.mp4",
+    description: 'The elusive origin of "afork veerq."',
     creationDate: "2023-05-18",
     captionTrack: "/captions/awards-ceremony.json",
   },
 ] satisfies DirectoryItem[];
+
+function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
+  if (tvChannels.length <= 1) return 0;
+
+  const candidates = tvChannels
+    .map((_, index) => ({
+      index,
+      weight: index === currentChannel
+        ? 0
+        : 1 / Math.pow(1 + (visitCounts[index] ?? 0), 4),
+    }))
+    .filter(({ weight }) => weight > 0);
+  const totalWeight = candidates.reduce(
+    (total, candidate) => total + candidate.weight,
+    0,
+  );
+  let selection = Math.random() * totalWeight;
+
+  for (const candidate of candidates) {
+    selection -= candidate.weight;
+    if (selection <= 0) return candidate.index;
+  }
+
+  return candidates[candidates.length - 1]?.index ?? currentChannel;
+}
 
 const socialItems: DirectoryItem[] = [
   {
@@ -222,6 +289,13 @@ const leftSections: DirectorySection[] = [
         label: "LoRaWAT",
         href: "https://devpost.com/software/computer-networks-hackathon-ssi-canada",
         preview: "/previews/devpost-lorawat.jpg",
+        slideshow: [
+          "/previews/lorawat-dashboard.png",
+          "/previews/lorawat-site.png",
+          "/previews/lorawat-level.png",
+          "/previews/lorawat-doors.png",
+          "/previews/devpost-lorawat.jpg",
+        ],
         external: true,
       },
       {
@@ -236,6 +310,12 @@ const leftSections: DirectorySection[] = [
         label: "Kompas",
         href: "https://devpost.com/software/kompas",
         preview: "/previews/devpost-kompas.png",
+        slideshow: [
+          "/previews/kompas-workbench.jpg",
+          "/previews/kompas-prototype.png",
+          "/previews/devpost-kompas.png",
+        ],
+        screenFit: "contain",
         external: true,
       },
     ],
@@ -298,6 +378,8 @@ const mobileDirectoryItems = directorySections
     section.items.map((item) => ({ ...item, sectionTitle: section.title })),
   );
 const MOBILE_WHEEL_ROW_HEIGHT = 48;
+const PLACEHOLDER_CHANNEL_DESCRIPTION =
+  "Placeholder channel description. A short summary of this channel will go here.";
 
 function directoryChannelHref(item: DirectoryItem) {
   const slug = item.label
@@ -645,9 +727,15 @@ export default function Index() {
   const [directoryChannel, setDirectoryChannel] =
     useState<DirectoryItem | null>(null);
   const [channel, setChannel] = useState(0);
+  const [slideshowIndex, setSlideshowIndex] = useState(0);
+  const channelVisitCountsRef = useRef<number[]>(
+    tvChannels.map((_, index) => (index === 0 ? 1 : 0)),
+  );
   const [channelTurns, setChannelTurns] = useState(0);
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [volumeTurns, setVolumeTurns] = useState(0);
+  const [isChannelDescriptionVisible, setIsChannelDescriptionVisible] =
+    useState(false);
   const [usedControls, setUsedControls] = useState({
     channel: false,
     volume: false,
@@ -657,6 +745,7 @@ export default function Index() {
   const [isTvModelReady, setIsTvModelReady] = useState(false);
   const [crtStageSize, setCrtStageSize] = useState({ width: 0, height: 0 });
   const crtStageRef = useRef<HTMLDivElement>(null);
+  const descriptionTriggerRef = useRef<HTMLButtonElement>(null);
   const previewTimerRef = useRef<number | null>(null);
   const previewTokenRef = useRef(0);
 
@@ -738,9 +827,63 @@ export default function Index() {
   const regularChannelActive =
     hoveredPreview === null && directoryChannel === null;
   const selectedPreview = hoveredPreview ?? directoryChannel ?? currentChannel;
+  const channelDescription =
+    selectedPreview.description ?? PLACEHOLDER_CHANNEL_DESCRIPTION;
+  const slideshow = selectedPreview.slideshow;
+  const selectedMedia = slideshow?.length
+    ? slideshow[slideshowIndex % slideshow.length]
+    : selectedPreview.preview;
+
+  useEffect(() => {
+    setSlideshowIndex(0);
+    if (!slideshow || slideshow.length < 2) return;
+
+    const timer = window.setInterval(() => {
+      setSlideshowIndex((index) => (index + 1) % slideshow.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [slideshow]);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("crt-description-change", {
+        detail: isChannelDescriptionVisible
+          ? {
+              title: selectedPreview.label,
+              text: channelDescription,
+              creationDate: resolvedCreationDate(selectedPreview),
+            }
+          : {},
+      }),
+    );
+  }, [
+    channelDescription,
+    isChannelDescriptionVisible,
+    isTvModelReady,
+    selectedPreview.label,
+  ]);
+
+  useEffect(() => {
+    if (!isChannelDescriptionVisible || !isMobileTvLayout) return;
+
+    const closeDescriptionOnOutsideTap = (event: PointerEvent) => {
+      if (descriptionTriggerRef.current?.contains(event.target as Node)) return;
+      setIsChannelDescriptionVisible(false);
+    };
+
+    window.addEventListener("pointerdown", closeDescriptionOnOutsideTap, true);
+    return () =>
+      window.removeEventListener(
+        "pointerdown",
+        closeDescriptionOnOutsideTap,
+        true,
+      );
+  }, [isChannelDescriptionVisible, isMobileTvLayout]);
+
   const screenMedia = (() => {
-    if (!selectedPreview.preview.endsWith(".mp4")) {
-      return selectedPreview.preview;
+    if (!selectedMedia.endsWith(".mp4")) {
+      return selectedMedia;
     }
 
     const mediaParams = new URLSearchParams();
@@ -752,7 +895,7 @@ export default function Index() {
     }
 
     const mediaQuery = mediaParams.toString();
-    return `${selectedPreview.preview}${mediaQuery ? `?${mediaQuery}` : ""}`;
+    return `${selectedMedia}${mediaQuery ? `?${mediaQuery}` : ""}`;
   })();
   const showPreview = (item: DirectoryItem) => {
     publishDirectoryChannelOverlay(item);
@@ -807,7 +950,12 @@ export default function Index() {
 
   const turnChannelDial = () => {
     returnToRegularChannels(false);
-    const nextChannel = (channel + 1) % tvChannels.length;
+    const nextChannel = pickWeightedChannel(
+      channel,
+      channelVisitCountsRef.current,
+    );
+    channelVisitCountsRef.current[nextChannel] =
+      (channelVisitCountsRef.current[nextChannel] ?? 0) + 1;
     publishChannelOverlay(tvChannels[nextChannel], nextChannel + 1);
     setChannel(nextChannel);
     setChannelTurns((turns) => turns + 1);
@@ -852,6 +1000,10 @@ export default function Index() {
           active={regularChannelActive && channel === 1}
           volume={volumeLevel / 4}
         />
+        <ShopifyAsciiCanvas
+          active={regularChannelActive && channel === 2}
+          volume={volumeLevel / 4}
+        />
         <RetroSocialCanvases />
         <ResumeTerminalCanvas active={selectedPreview.label === "resume"} />
         {/* This hero was inspired and implemented based on the implementation at https://crazygl.com/hero/vhs-product-screen */}
@@ -886,20 +1038,63 @@ export default function Index() {
               modelTilt={-2.5}
               monitorX={0}
               monitorY={-0.06}
-              screenFit="cover"
+              screenFit={selectedPreview.screenFit ?? "cover"}
               screenSizeScale={1}
-              curvature={0.16}
-              scanlineStrength={0.32}
-              chromaticEdgeIntensity={0.48}
-              vignetteStrength={0.52}
-              screenEmissive={0.86}
-              glitchFrequency={4}
-              glitchIntensity={0.35}
+              curvature={0.19}
+              scanlineStrength={0.46}
+              scanlineFrequency={720}
+              chromaticEdgeIntensity={0.68}
+              vignetteStrength={0.62}
+              screenEmissive={0.9}
+              glitchFrequency={6}
+              glitchIntensity={0.58}
               backgroundColor="#0e0e0e"
               pointerParallax={1}
-              turnOnAnimation
+              turnOnAnimation={!slideshow}
             />
           ) : null}
+          {isTvModelReady ? (
+            <button
+              type="button"
+              className="crt-screen-description-trigger"
+              ref={descriptionTriggerRef}
+              aria-label={`${
+                isChannelDescriptionVisible ? "Hide" : "Show"
+              } description for ${selectedPreview.label}`}
+              aria-pressed={isChannelDescriptionVisible}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== "touch") {
+                  setIsChannelDescriptionVisible(true);
+                }
+              }}
+              onPointerLeave={(event) => {
+                if (event.pointerType !== "touch") {
+                  setIsChannelDescriptionVisible(false);
+                }
+              }}
+              onFocus={(event) => {
+                if (
+                  !isMobileTvLayout ||
+                  event.currentTarget.matches(":focus-visible")
+                ) {
+                  setIsChannelDescriptionVisible(true);
+                }
+              }}
+              onBlur={() => setIsChannelDescriptionVisible(false)}
+              onClick={() => {
+                if (isMobileTvLayout) {
+                  setIsChannelDescriptionVisible((isVisible) => !isVisible);
+                }
+              }}
+            />
+          ) : null}
+          <span className="sr-only" aria-live="polite">
+            {isChannelDescriptionVisible
+              ? `${selectedPreview.label}. ${resolvedCreationDate(
+                  selectedPreview,
+                )}. ${channelDescription}`
+              : ""}
+          </span>
           {isTvModelReady ? (
             <div
               className="crt-controls"
