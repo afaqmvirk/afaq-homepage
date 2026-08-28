@@ -16,9 +16,6 @@ import HeroPreviewCanvas, {
 import PipesScreensaverCanvas, {
   PIPES_SCREENSAVER_MEDIA,
 } from "~/components/PipesScreensaverCanvas";
-import RetroSocialCanvases, {
-  RETRO_SOCIAL_MEDIA,
-} from "~/components/RetroSocialCanvases";
 import ResumeTerminalCanvas, {
   RESUME_TERMINAL_MEDIA,
 } from "~/components/ResumeTerminalCanvas";
@@ -55,44 +52,96 @@ const defaultPreview: DirectoryItem = {
   creationDate: "current",
 };
 
-const tvChannels = [
+const projectChannels = [
+  {
+    label: "LogiClaw",
+    href: "https://devpost.com/software/logiclaw",
+    preview: "/previews/devpost-logiclaw.jpg",
+    external: true,
+  },
+  {
+    label: "Donair",
+    href: "https://devpost.com/software/flowstate-7ihg10",
+    preview: "/previews/donair.mp4",
+    startAt: 3,
+    poster: "/previews/devpost-donair.png",
+    external: true,
+  },
+  {
+    label: "Bobby",
+    href: "https://devpost.com/software/onthepulse",
+    preview: "/previews/bobby-demo-h264.mp4",
+    poster: "/previews/devpost-bobby.png",
+    external: true,
+  },
+  {
+    label: "LoRaWAT",
+    href: "https://devpost.com/software/computer-networks-hackathon-ssi-canada",
+    preview: "/previews/devpost-lorawat.jpg",
+    slideshow: [
+      "/previews/lorawat-dashboard.png",
+      "/previews/lorawat-site.png",
+      "/previews/lorawat-level.png",
+      "/previews/lorawat-doors.png",
+      "/previews/devpost-lorawat.jpg",
+    ],
+    external: true,
+  },
+  {
+    label: "Kompas",
+    href: "https://devpost.com/software/kompas",
+    preview: "/previews/devpost-kompas.png",
+    slideshow: [
+      "/previews/kompas-workbench.jpg",
+      "/previews/kompas-prototype.png",
+      "/previews/devpost-kompas.png",
+    ],
+    screenFit: "contain",
+    external: true,
+  },
+] satisfies DirectoryItem[];
+
+const tvChannels: DirectoryItem[] = [
   defaultPreview,
   {
     label: "3D pipes",
-    href: "/",
+    href: "",
     preview: PIPES_SCREENSAVER_MEDIA,
     description: "This was just a cool screensaver.",
     creationDate: "2026-08-26",
   },
   {
     label: "Shopify ASCII",
-    href: "/",
+    href: "https://internships.shopify.com/",
     preview: SHOPIFY_ASCII_MEDIA,
     description:
       "My internship at Shopify has lasted two years so far. I've worked on the Analytics and Financial Services teams, working on AI agents, RAG systems, and a whole bunch of other cool things.",
     creationDate: "2026-08-26",
+    external: true,
   },
   {
     label: "Animation Project 1",
-    href: "/",
+    href: "https://www.youtube.com/watch?v=pzAtMuLGgs0",
     preview: "/channels/animation-project-1.mp4",
     description:
       'An assignment I submitted to my 10th grade Communications Technology class, with the assignment prompt being "a loading screen."',
     creationDate: "2022-01-10",
     startAt: 3,
+    external: true,
   },
   {
     label: "Animation Project 2",
-    href: "/",
+    href: "https://www.youtube.com/watch?v=CxNt9lZIcDI",
     preview: "/channels/animation-project-2.mp4",
     description:
       '"Bee and Flower" was a submission to an assignment for my 10th grade media class, of "a character visiting three places."',
     creationDate: "2022-02-01",
     startAt: 3,
+    external: true,
   },
   {
     label: "Text-to-SQL",
-    href: "/",
+    href: "https://www.youtube.com/watch?v=_9E5xJQrnaQ",
     preview: "/channels/text-to-sql.mp4",
     description:
       "A lecture I gave to my COMP 3005 class on Text-to-SQL systems.",
@@ -100,109 +149,122 @@ const tvChannels = [
     startAt: 360,
     endAt: 420,
     captionTrack: "/captions/text-to-sql.json",
+    external: true,
   },
   {
     label: "AMR Surveillance Bias",
-    href: "/",
+    href: "https://github.com/afaqmvirk/cat",
     preview: "/channels/amr-surveillance-bias.mp4",
     description: "A research paper I presented.",
     creationDate: "2026-06-27",
     startAt: 60,
     captionTrack: "/captions/amr-surveillance-bias.json",
+    external: true,
   },
   {
     label: "Balancing Chemical Equations",
-    href: "/",
+    href: "https://mthm.tech",
     preview: "/channels/chemical-equations.mp4",
     description:
       "Just another section of the 4000+ hours I've spent tutoring over the past six years.",
     creationDate: "2024-09-11",
     startAt: 30,
     captionTrack: "/captions/chemical-equations.json",
+    external: true,
   },
   {
     label: "Relatom",
-    href: "/",
+    href: "https://github.com/afaqmvirk/relatom",
     preview: "/channels/relatom.mp4",
     description:
       'Relatom—a relational query language made up of "atomic" statements. Bonus project for COMP 3005.',
     creationDate: "-",
     startAt: 120,
     captionTrack: "/captions/relatom.json",
+    external: true,
   },
   {
     label: "WebSocket Collaboration",
-    href: "/",
+    href: "https://calendar.carleton.ca/search/?P=COMP%202406",
     preview: "/channels/websocket-collaboration.mp4",
     description: "Another project for my COMP 2406 class.",
     creationDate: "-",
     startAt: 20,
     captionTrack: "/captions/websocket-collaboration.json",
+    external: true,
   },
   {
     label: "LC Games",
-    href: "/",
+    href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/leetcode-games.mp4",
     description:
       "Challenge 1B of the LeetCode Games workshop I held in January 2026 at Carleton University. Each problem was intended to introduce students to algorithmic problem-solving. I put together some fun videos last-minute introducing each challenge.",
     creationDate: "2026-01-28",
     startAt: 21,
+    external: true,
   },
   {
     label: "PortalPants",
-    href: "/",
+    href: "https://www.instagram.com/romanianspongebob/",
     preview: "/channels/portalpants.mp4",
     description:
       'SpongeBob PortalPants was a submission to an assignment for my 10th grade media class, of "a character visiting three places."',
     creationDate: "2022-01-22",
     startAt: 25,
+    external: true,
   },
   {
     label: "COMP2406B Final Project",
-    href: "/",
+    href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
     preview: "/channels/comp2406b-final-project.mp4",
     description:
       "A Kahoot! clone I built as a final project for my COMP 2406 Web Applications class.",
     creationDate: "2025-04-08",
     startAt: 150,
     captionTrack: "/captions/comp2406b-final-project.json",
+    external: true,
   },
   {
     label: "Krusty Kalkulations",
-    href: "/",
+    href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/krusty-kalkulations.mp4",
     description:
       "Challenge 3 of the LeetCode Games workshop I held in January 2026 at Carleton University. Each problem was intended to introduce students to algorithmic problem-solving. I put together some fun videos last-minute introducing each challenge.",
     creationDate: "2026-01-28",
     startAt: 17,
+    external: true,
   },
   {
     label: "K.A.R.E.N.",
-    href: "/",
+    href: "https://devpost.com/software/karen-5g01yk",
     preview: "/channels/karen-demo.mp4",
     description:
       "uOttaHack 8 submission—programmed an AI assistant on an FPGA using Tcl and AMD Vivado, complete with a screensaver and brick-breaker game.",
     creationDate: "2026-01-18",
     startAt: 3,
+    external: true,
   },
   {
     label: "UCDSB Board Meeting",
-    href: "/",
+    href: "https://www.standard-freeholder.com/news/local-news/seaways-ali-and-ccvss-virk-elected-ucdsb-student-trustees",
     preview: "/channels/ucdsb-board-meeting.mp4",
     description:
       "An excerpt of my time as a trustee for the UCDSB, where I advocated on topics like STEM in classrooms, the introduction of AI in classrooms, and more.",
     creationDate: "2024-03-06",
     captionTrack: "/captions/ucdsb-board-meeting.json",
+    external: true,
   },
   {
     label: "Awards Ceremony",
-    href: "/",
+    href: "https://www.cornwallseawaynews.com/education/ccvs-student-represents-canada-at-international-science-fair/",
     preview: "/channels/awards-ceremony.mp4",
     description: 'The elusive origin of "afork veerq."',
     creationDate: "2023-05-18",
     captionTrack: "/captions/awards-ceremony.json",
+    external: true,
   },
-] satisfies DirectoryItem[];
+  ...projectChannels,
+];
 
 function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
   if (tvChannels.length <= 1) return 0;
@@ -231,27 +293,34 @@ function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
 
 const socialItems: DirectoryItem[] = [
   {
-    label: "Instagram",
+    label: "instagram",
     href: "https://instagram.com/afaqmvirk",
-    preview: RETRO_SOCIAL_MEDIA.Instagram,
+    preview: "/previews/social-instagram.png",
     external: true,
   },
   {
-    label: "LinkedIn",
+    label: "linkedin",
     href: "https://linkedin.com/in/afaqmvirk",
-    preview: RETRO_SOCIAL_MEDIA.LinkedIn,
+    preview: "/previews/social-linkedin.png",
     external: true,
   },
   {
-    label: "X",
+    label: "github",
+    href: "https://github.com/afaqmvirk",
+    preview: "/previews/github.png",
+    screenFit: "contain",
+    external: true,
+  },
+  {
+    label: "x (twitter)",
     href: "https://x.com/afaqmvirk",
-    preview: RETRO_SOCIAL_MEDIA.X,
+    preview: "/previews/social-x.png",
     external: true,
   },
   {
-    label: "Devpost",
-    href: "https://devpost.com/afaqmvirk",
-    preview: RETRO_SOCIAL_MEDIA.Devpost,
+    label: "kahoot",
+    href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
+    preview: "/previews/social-kahoot.png",
     external: true,
   },
 ];
@@ -261,79 +330,20 @@ const leftSections: DirectorySection[] = [
     title: "Socials",
     items: socialItems,
   },
-  {
-    title: "Projects",
-    items: [
-      {
-        label: "LogiClaw",
-        href: "https://devpost.com/software/logiclaw",
-        preview: "/previews/devpost-logiclaw.jpg",
-        external: true,
-      },
-      {
-        label: "Donair",
-        href: "https://devpost.com/software/flowstate-7ihg10",
-        preview: "/previews/donair.mp4",
-        startAt: 3,
-        poster: "/previews/devpost-donair.png",
-        external: true,
-      },
-      {
-        label: "Bobby",
-        href: "https://devpost.com/software/onthepulse",
-        preview: "/previews/bobby-demo-h264.mp4",
-        poster: "/previews/devpost-bobby.png",
-        external: true,
-      },
-      {
-        label: "LoRaWAT",
-        href: "https://devpost.com/software/computer-networks-hackathon-ssi-canada",
-        preview: "/previews/devpost-lorawat.jpg",
-        slideshow: [
-          "/previews/lorawat-dashboard.png",
-          "/previews/lorawat-site.png",
-          "/previews/lorawat-level.png",
-          "/previews/lorawat-doors.png",
-          "/previews/devpost-lorawat.jpg",
-        ],
-        external: true,
-      },
-      {
-        label: "KAREN",
-        href: "https://devpost.com/software/karen-5g01yk",
-        preview: "/channels/karen-demo.mp4",
-        poster: "/previews/devpost-karen.jpg",
-        startAt: 3,
-        external: true,
-      },
-      {
-        label: "Kompas",
-        href: "https://devpost.com/software/kompas",
-        preview: "/previews/devpost-kompas.png",
-        slideshow: [
-          "/previews/kompas-workbench.jpg",
-          "/previews/kompas-prototype.png",
-          "/previews/devpost-kompas.png",
-        ],
-        screenFit: "contain",
-        external: true,
-      },
-    ],
-  },
 ];
 
 const rightSections: DirectorySection[] = [
   {
-    title: "Design",
+    title: "Websites",
     items: [
       {
-        label: "HtH III",
+        label: "hackthehill",
         href: "https://hackthehill.com",
         preview: "/previews/hack-the-hill.png",
         external: true,
       },
       {
-        label: "sih",
+        label: "stupideas",
         href: "https://stupideas.com",
         preview: "/channels/sih-site-scroll.mp4",
         poster: "/previews/stupid-ideas.png",
@@ -342,21 +352,10 @@ const rightSections: DirectorySection[] = [
           "The website I built for the Stupid Ideas Hackathon community.",
         external: true,
       },
-    ],
-  },
-  {
-    title: "MathemaTech",
-    items: [
       {
-        label: "Courses",
+        label: "mthmtech",
         href: "https://mthm.tech",
         preview: "/previews/mathematech.png",
-        external: true,
-      },
-      {
-        label: "Kahoot!",
-        href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
-        preview: "/previews/kahoot.png",
         external: true,
       },
     ],
@@ -382,6 +381,9 @@ const mobileDirectoryItems = directorySections
     section.items.map((item) => ({ ...item, sectionTitle: section.title })),
   );
 const MOBILE_WHEEL_ROW_HEIGHT = 48;
+const CRT_STATIC_TRANSITION_MS = 700;
+// Set to true to restore the channel title strip and description panel.
+const VIDEO_METADATA_OVERLAYS_ENABLED = false;
 const PLACEHOLDER_CHANNEL_DESCRIPTION =
   "Placeholder channel description. A short summary of this channel will go here.";
 
@@ -391,6 +393,19 @@ function directoryChannelHref(item: DirectoryItem) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
   return `#channel-${slug}`;
+}
+
+function formattedLinkDestination(href: string) {
+  if (!/^https?:\/\//i.test(href)) return href;
+
+  try {
+    const url = new URL(href);
+    const hostname = url.hostname.replace(/^www\./, "");
+    const pathname = url.pathname === "/" ? "" : url.pathname.replace(/\/$/, "");
+    return `${hostname}${pathname}`;
+  } catch {
+    return href;
+  }
 }
 
 function resolvedCreationDate(item: DirectoryItem) {
@@ -411,8 +426,10 @@ function publishChannelOverlay(
     new CustomEvent("crt-channel-change", {
       detail: {
         channel: channelNumber,
-        title: item.label,
-        creationDate: resolvedCreationDate(item),
+        title: VIDEO_METADATA_OVERLAYS_ENABLED ? item.label : "",
+        creationDate: VIDEO_METADATA_OVERLAYS_ENABLED
+          ? resolvedCreationDate(item)
+          : "",
       },
     }),
   );
@@ -477,7 +494,6 @@ function DirectoryColumn({
     <div className={`directory-column directory-column--${side}`}>
       {sections.map((section) => (
         <section className="directory-section" key={section.title}>
-          <h2>{section.title}</h2>
           <ul>
             {section.items.map((item) => (
               <li key={item.label}>
@@ -504,12 +520,11 @@ function DirectoryColumn({
 
 function MobileSocialLinks() {
   const iconSources: Record<string, string> = {
-    Instagram: "/instagram.svg",
-    LinkedIn: "/linkedin.svg",
-  };
-  const iconLabels: Record<string, string> = {
-    X: "X",
-    Devpost: "D",
+    instagram: "/instagram.svg",
+    linkedin: "/linkedin.svg",
+    github: "/github.svg",
+    "x (twitter)": "/x.svg",
+    kahoot: "/kahoot.png",
   };
 
   return (
@@ -523,11 +538,7 @@ function MobileSocialLinks() {
           aria-label={item.label}
           title={item.label}
         >
-          {iconSources[item.label] ? (
-            <img src={iconSources[item.label]} alt="" />
-          ) : (
-            <span aria-hidden="true">{iconLabels[item.label]}</span>
-          )}
+          <img src={iconSources[item.label]} alt="" />
         </a>
       ))}
     </nav>
@@ -665,9 +676,6 @@ function MobileDirectoryWheel({
       }`}
       aria-label="Swipe to browse links"
     >
-      <div className="mobile-directory-wheel__section" aria-live="polite">
-        {items[selectedIndex].sectionTitle}
-      </div>
       <div
         className="mobile-directory-wheel__viewport"
         role="slider"
@@ -732,6 +740,8 @@ export default function Index() {
     useState<DirectoryItem | null>(null);
   const [channel, setChannel] = useState(0);
   const [slideshowIndex, setSlideshowIndex] = useState(0);
+  const [slideshowTransitionActive, setSlideshowTransitionActive] =
+    useState(false);
   const channelVisitCountsRef = useRef<number[]>(
     tvChannels.map((_, index) => (index === 0 ? 1 : 0)),
   );
@@ -748,8 +758,11 @@ export default function Index() {
   const [isMobileTvLayout, setIsMobileTvLayout] = useState(false);
   const [isTvModelReady, setIsTvModelReady] = useState(false);
   const [crtStageSize, setCrtStageSize] = useState({ width: 0, height: 0 });
+  const [isScreenLinkTooltipVisible, setIsScreenLinkTooltipVisible] =
+    useState(false);
   const crtStageRef = useRef<HTMLDivElement>(null);
   const descriptionTriggerRef = useRef<HTMLButtonElement>(null);
+  const screenLinkTooltipRef = useRef<HTMLSpanElement>(null);
   const previewTimerRef = useRef<number | null>(null);
   const previewTokenRef = useRef(0);
 
@@ -831,6 +844,10 @@ export default function Index() {
   const regularChannelActive =
     hoveredPreview === null && directoryChannel === null;
   const selectedPreview = hoveredPreview ?? directoryChannel ?? currentChannel;
+  const screenLinkHref = selectedPreview.href || null;
+  const screenLinkDestination = screenLinkHref
+    ? formattedLinkDestination(screenLinkHref)
+    : "";
   const channelDescription =
     selectedPreview.description ?? PLACEHOLDER_CHANNEL_DESCRIPTION;
   const slideshow = selectedPreview.slideshow;
@@ -840,19 +857,38 @@ export default function Index() {
 
   useEffect(() => {
     setSlideshowIndex(0);
-    if (!slideshow || slideshow.length < 2) return;
+    if (!slideshow) {
+      setSlideshowTransitionActive(false);
+      return;
+    }
 
-    const timer = window.setInterval(() => {
+    setSlideshowTransitionActive(true);
+    const transitionTimer = window.setTimeout(() => {
+      setSlideshowTransitionActive(false);
+    }, CRT_STATIC_TRANSITION_MS);
+
+    if (slideshow.length < 2) {
+      return () => window.clearTimeout(transitionTimer);
+    }
+
+    const slideshowTimer = window.setInterval(() => {
       setSlideshowIndex((index) => (index + 1) % slideshow.length);
     }, 5000);
 
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(transitionTimer);
+      window.clearInterval(slideshowTimer);
+    };
   }, [slideshow]);
+
+  useEffect(() => {
+    setIsScreenLinkTooltipVisible(false);
+  }, [screenLinkHref]);
 
   useEffect(() => {
     window.dispatchEvent(
       new CustomEvent("crt-description-change", {
-        detail: isChannelDescriptionVisible
+        detail: VIDEO_METADATA_OVERLAYS_ENABLED && isChannelDescriptionVisible
           ? {
               title: selectedPreview.label,
               text: channelDescription,
@@ -991,6 +1027,16 @@ export default function Index() {
     setUsedControls((controls) => ({ ...controls, volume: true }));
   };
 
+  const positionScreenLinkTooltip = (clientX: number, clientY: number) => {
+    const stage = crtStageRef.current;
+    const tooltip = screenLinkTooltipRef.current;
+    if (!stage || !tooltip) return;
+
+    const stageBounds = stage.getBoundingClientRect();
+    tooltip.style.left = `${clientX - stageBounds.left}px`;
+    tooltip.style.top = `${clientY - stageBounds.top}px`;
+  };
+
   return (
     <main className="link-directory">
       <h1 className="sr-only">Afaq Virk</h1>
@@ -1008,7 +1054,6 @@ export default function Index() {
           active={regularChannelActive && channel === 2}
           volume={volumeLevel / 4}
         />
-        <RetroSocialCanvases />
         <ResumeTerminalCanvas active={selectedPreview.label === "resume"} />
         {/* This hero was inspired and implemented based on the implementation at https://crazygl.com/hero/vhs-product-screen */}
         {/* Original implementation by @ybouane https://x.com/ybouane */}
@@ -1054,10 +1099,55 @@ export default function Index() {
               glitchIntensity={0.58}
               backgroundColor="#0e0e0e"
               pointerParallax={1}
-              turnOnAnimation={!slideshow}
+              turnOnAnimation={!slideshow || slideshowTransitionActive}
             />
           ) : null}
-          {isTvModelReady ? (
+          {isTvModelReady && screenLinkHref ? (
+            <>
+              <a
+                className="crt-screen-link"
+                href={screenLinkHref}
+                aria-label={`Open ${selectedPreview.label}: ${screenLinkDestination}`}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === "touch") return;
+                  positionScreenLinkTooltip(event.clientX, event.clientY);
+                  setIsScreenLinkTooltipVisible(true);
+                }}
+                onPointerMove={(event) => {
+                  if (event.pointerType !== "touch") {
+                    positionScreenLinkTooltip(event.clientX, event.clientY);
+                  }
+                }}
+                onPointerLeave={() => setIsScreenLinkTooltipVisible(false)}
+                onFocus={(event) => {
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  positionScreenLinkTooltip(
+                    bounds.left + bounds.width / 2,
+                    bounds.top + bounds.height / 2,
+                  );
+                  setIsScreenLinkTooltipVisible(true);
+                }}
+                onBlur={() => setIsScreenLinkTooltipVisible(false)}
+                {...(selectedPreview.external
+                  ? { target: "_blank", rel: "noreferrer" }
+                  : {})}
+              />
+              <span
+                className={`crt-screen-link-tooltip${
+                  isScreenLinkTooltipVisible
+                    ? " crt-screen-link-tooltip--visible"
+                    : ""
+                }`}
+                ref={screenLinkTooltipRef}
+                aria-hidden="true"
+              >
+                {screenLinkDestination}
+              </span>
+            </>
+          ) : null}
+          {VIDEO_METADATA_OVERLAYS_ENABLED &&
+          isTvModelReady &&
+          !screenLinkHref ? (
             <button
               type="button"
               className="crt-screen-description-trigger"
