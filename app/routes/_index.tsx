@@ -22,6 +22,9 @@ import ResumeTerminalCanvas, {
 import ShopifyAsciiCanvas, {
   SHOPIFY_ASCII_MEDIA,
 } from "~/components/ShopifyAsciiCanvas";
+import SocialScreensaverCanvases, {
+  SOCIAL_SCREENSAVER_MEDIA,
+} from "~/components/SocialScreensaverCanvases";
 
 type DirectoryItem = {
   label: string;
@@ -295,32 +298,31 @@ const socialItems: DirectoryItem[] = [
   {
     label: "instagram",
     href: "https://instagram.com/afaqmvirk",
-    preview: "/previews/social-instagram.png",
+    preview: SOCIAL_SCREENSAVER_MEDIA.instagram,
     external: true,
   },
   {
     label: "linkedin",
     href: "https://linkedin.com/in/afaqmvirk",
-    preview: "/previews/social-linkedin.png",
+    preview: SOCIAL_SCREENSAVER_MEDIA.linkedin,
     external: true,
   },
   {
     label: "github",
     href: "https://github.com/afaqmvirk",
-    preview: "/previews/github.png",
-    screenFit: "contain",
+    preview: SOCIAL_SCREENSAVER_MEDIA.github,
     external: true,
   },
   {
     label: "x (twitter)",
     href: "https://x.com/afaqmvirk",
-    preview: "/previews/social-x.png",
+    preview: SOCIAL_SCREENSAVER_MEDIA["x (twitter)"],
     external: true,
   },
   {
     label: "kahoot",
     href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
-    preview: "/previews/social-kahoot.png",
+    preview: SOCIAL_SCREENSAVER_MEDIA.kahoot,
     external: true,
   },
 ];
@@ -1064,6 +1066,7 @@ export default function Index() {
           volume={volumeLevel / 4}
         />
         <ResumeTerminalCanvas active={selectedPreview.label === "resume"} />
+        <SocialScreensaverCanvases activeSocial={selectedPreview.label} />
         {/* This hero was inspired and implemented based on the implementation at https://crazygl.com/hero/vhs-product-screen */}
         {/* Original implementation by @ybouane https://x.com/ybouane */}
         {/* Sharp 13LM16 TV model by TWIG-design: https://www.cgtrader.com/free-3d-models/electronics/video/old-vintage-sharp-13lm16-tv-3d-model */}

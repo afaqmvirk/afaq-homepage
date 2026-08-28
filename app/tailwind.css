@@ -427,6 +427,13 @@ body {
     inset: 0;
   }
 
+  .crt-screen-link {
+    top: 43.8%;
+    left: 49.3%;
+    width: 68%;
+    height: 38%;
+  }
+
   .directory-column {
     display: none;
   }
