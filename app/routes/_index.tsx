@@ -396,13 +396,13 @@ function directoryChannelHref(item: DirectoryItem) {
 }
 
 function formattedLinkDestination(href: string) {
-  if (!/^https?:\/\//i.test(href)) return href;
+  if (!/^https?:\/\//i.test(href)) {
+    return typeof window === "undefined" ? "" : window.location.hostname;
+  }
 
   try {
     const url = new URL(href);
-    const hostname = url.hostname.replace(/^www\./, "");
-    const pathname = url.pathname === "/" ? "" : url.pathname.replace(/\/$/, "");
-    return `${hostname}${pathname}`;
+    return url.hostname.replace(/^www\./, "");
   } catch {
     return href;
   }
@@ -1037,6 +1037,15 @@ export default function Index() {
     tooltip.style.top = `${clientY - stageBounds.top}px`;
   };
 
+  const muteTv = () => {
+    window.dispatchEvent(
+      new CustomEvent("crt-volume-change", {
+        detail: { volume: 0, level: 0 },
+      }),
+    );
+    setVolumeLevel(0);
+  };
+
   return (
     <main className="link-directory">
       <h1 className="sr-only">Afaq Virk</h1>
@@ -1108,6 +1117,7 @@ export default function Index() {
                 className="crt-screen-link"
                 href={screenLinkHref}
                 aria-label={`Open ${selectedPreview.label}: ${screenLinkDestination}`}
+                onClick={muteTv}
                 onPointerEnter={(event) => {
                   if (event.pointerType === "touch") return;
                   positionScreenLinkTooltip(event.clientX, event.clientY);
