@@ -1,0 +1,18 @@
+Double-Sided Ddakji (Challenge 1A)
+Problem: https://afaq.mov/lc-01.pdf
+
+Sample 1 Input
+VVHVVHHHHHVVVVV
+
+Sample 1 Output
+6
+C D
+A B
+
+Sample 2 Input
+VHVVHHV
+
+Sample 2 Output
+0
+B A
+D C

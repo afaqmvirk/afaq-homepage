@@ -1,0 +1,14 @@
+Glass Tree (Challenge 1C)
+Problem: https://afaq.mov/lc-03.pdf
+
+Sample 1 Input
+101011111011011
+
+Sample 1 Output
+3
+
+Sample 2 Input
+1001111
+
+Sample 2 Output
+0

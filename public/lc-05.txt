@@ -1,0 +1,20 @@
+Krusty Kalkulations (Challenge 3)
+Problem: https://afaq.mov/lc-05.pdf
+
+Sample 1 Input
+6
+(9, 12, 4) (15, 18, 1) (16, 17, 2) (12, 15, 3) (11, 13, 3)
+
+Sample 1 Output
+4
+
+Sample 2 Input
+5
+(9, 14, 4) (9, 16, 3) (10, 12, 1) (13, 14, 2) (14, 17, 2)
+
+Sample 2 Output
+3
+
+Note: These outputs process reservations in the order given.
+For the optional bonus that maximizes accepted reservations regardless of
+order, Sample 2's output is 4.

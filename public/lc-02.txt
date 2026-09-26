@@ -1,0 +1,14 @@
+X and O (Challenge 1B)
+Problem: https://afaq.mov/lc-02.pdf
+
+Sample 1 Input
+XOXXOOXO
+
+Sample 1 Output
+3
+
+Sample 2 Input
+XOOXOOXX
+
+Sample 2 Output
+3

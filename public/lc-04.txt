@@ -1,0 +1,22 @@
+House Divided (Challenge 2)
+Problem: https://afaq.mov/lc-04.pdf
+
+Sample 1 Input
+AGA
+AGTGAGGTAGT
+
+Sample 1 Output
+1
+AGT
+
+Sample 2 Input
+TGATG
+TGCTGCTGTTGTTG
+
+Sample 2 Output
+2
+TGCTG
+TGTTG
+
+Note: The PDF's second sample output has a typo: TTGTG should be TGTTG.
+The corrected output above matches the explanation and reference solution.
