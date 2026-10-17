@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="deck.css">
+  <script type="module" src="mascots.js"></script>
+  <style>
+    html,body{width:1600px;height:900px;overflow:hidden;background:var(--paper) var(--texture) repeat}
+    main{position:absolute;left:126px;top:181px}
+    h1{font-size:132px;font-weight:500;letter-spacing:-7px;line-height:1.02;margin:0}
+    .subtitle{font-size:35px;letter-spacing:-.8px;line-height:1.4;color:#909090;margin-top:34px}
+    .placeholder{position:absolute;left:1060px;top:290px;width:320px;height:320px;border:1px dashed #444;border-radius:50%;display:grid;place-items:center}
+    .placeholder-mascot{width:220px;height:220px;opacity:.42;animation:drift 7s ease-in-out infinite}
+  </style>
+</head>
+<body>
+  <!-- Grok Bot: replace this document with your slide. Canvas: 1600 x 900.
+       Shared brand styles and local fonts are available from deck.css.
+       Keep assets relative to this folder. Saving this file reloads the deck
+       while keeping the current slide. -->
+  <main aria-label="Editable slide placeholder"><h1>Insert header<br>text here</h1><p class="subtitle">bottom text</p></main>
+  <div class="placeholder" aria-hidden="true"><div class="placeholder-mascot" data-mascot="circle"></div></div>
+</body>
+</html>
