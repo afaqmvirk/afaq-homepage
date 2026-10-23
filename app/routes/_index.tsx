@@ -266,6 +266,15 @@ const tvChannels: DirectoryItem[] = [
     captionTrack: "/captions/awards-ceremony.json",
     external: true,
   },
+  {
+    label: "COMP 5801 Preliminary Proposal",
+    href: "https://5801.afaq.mov/prelim-video",
+    preview: "https://4sxl9efygqhjgnhy.public.blob.vercel-storage.com/prelim-video/stream-v1/lunar-720-49df0119431d.mp4",
+    description:
+      "Our preliminary proposal presentation on cooperative lunar mapping for COMP 5801.",
+    screenFit: "contain",
+    external: true,
+  },
   ...projectChannels,
 ];
 
