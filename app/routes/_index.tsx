@@ -268,6 +268,7 @@ const tvChannels: DirectoryItem[] = [
   },
   {
     label: "COMP 5801 Preliminary Proposal",
+    startAt: 300,
     href: "https://5801.afaq.mov/prelim-video",
     preview: "https://4sxl9efygqhjgnhy.public.blob.vercel-storage.com/prelim-video/stream-v1/lunar-720-49df0119431d.mp4",
     description:
