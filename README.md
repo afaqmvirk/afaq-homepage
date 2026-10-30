@@ -10,6 +10,12 @@ Run the dev server:
 npm run dev
 ```
 
+To optimize the MP4s in `public/channels` and `public/previews`, install FFmpeg
+on PATH and run `node scripts/optimize-videos.mjs`. This losslessly repackages
+the files with front-loaded playback metadata and smaller chunk tables. It
+verifies encoded audio/video hashes before replacing each file, and keeps
+already optimized files when repackaging would not help.
+
 ## Deployment
 
 First, build your app for production:

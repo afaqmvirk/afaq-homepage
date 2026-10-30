@@ -1361,6 +1361,12 @@ uniform float u_haveCaption;`,
             v.muted = videoVolumeRef.current <= 0;`,
       )
       .replace(
+        "            v.autoplay = true;",
+        // onMeta starts playback after restoring the channel's position. Starting
+        // earlier can fetch/decode the beginning just before a long seek.
+        "            v.autoplay = false;",
+      )
+      .replace(
         "        const prevVid = videoElRef.current;",
         `        const prevVid = videoElRef.current;
         audioProgramCleanupRef.current?.();
