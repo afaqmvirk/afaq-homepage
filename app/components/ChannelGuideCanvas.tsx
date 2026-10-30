@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 
-export default function ChannelGuideCanvas({ labels, offset, focused, active }: {
-  labels: string[]; offset: number; focused: number; active: boolean;
+export default function ChannelGuideCanvas({ channels, offset, focused, active }: {
+  channels: readonly { label: string; year: number }[];
+  offset: number; focused: number; active: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function ChannelGuideCanvas({ labels, offset, focused, active }: 
       ctx.beginPath();
       ctx.rect(0, 135, 960, 480);
       ctx.clip();
-      labels.forEach((label, index) => {
+      channels.forEach(({ label, year }, index) => {
         const y = 135 + (index - offset) * 60;
         if (y < 75 || y > 615) return;
         if (index === focused) {
@@ -39,7 +40,10 @@ export default function ChannelGuideCanvas({ labels, offset, focused, active }: 
         ctx.fillStyle = "#fff";
         ctx.font = '500 28px "Geist Pixel Square", monospace';
         ctx.fillText(String(index + 1).padStart(2, "0"), 70, y + 40);
-        ctx.fillText(label, 150, y + 40, 710);
+        ctx.fillText(label, 150, y + 40, 620);
+        ctx.textAlign = "right";
+        ctx.fillText(String(year), 890, y + 40);
+        ctx.textAlign = "left";
       });
       ctx.restore();
       ctx.fillStyle = "#fff";
@@ -51,7 +55,7 @@ export default function ChannelGuideCanvas({ labels, offset, focused, active }: 
     draw();
     void document.fonts.load('500 28px "Geist Pixel Square"').then(draw);
     return () => { cancelled = true; };
-  }, [labels, offset, focused, active]);
+  }, [channels, offset, focused, active]);
   return <canvas id="channel-guide" ref={ref} width={960} height={750} aria-hidden="true"
     style={{ position: "fixed", left: -10000, top: 0, pointerEvents: "none" }} />;
 }

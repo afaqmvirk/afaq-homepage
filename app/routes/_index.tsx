@@ -26,6 +26,7 @@ import SocialScreensaverCanvases, {
 
 type DirectoryItem = {
   label: string;
+  year: number;
   slug?: string;
   socialKey?: string;
   href: string;
@@ -48,7 +49,7 @@ type DirectorySection = {
 };
 
 const defaultPreview: DirectoryItem = {
-  label: "homepage", slug: "Afaq Virk",
+  label: "homepage", year: 2025, slug: "Afaq Virk",
   href: "/",
   preview: HERO_PREVIEW_MEDIA,
   description:
@@ -58,13 +59,13 @@ const defaultPreview: DirectoryItem = {
 
 const projectChannels = [
   {
-    label: "logiclaw (logitech hackathon winner)", slug: "LogiClaw",
+    label: "logiclaw (logitech hackathon winner)", year: 2026, slug: "LogiClaw",
     href: "https://devpost.com/software/logiclaw",
     preview: "/previews/devpost-logiclaw.jpg",
     external: true,
   },
   {
-    label: "donair (conuhacks winner)", slug: "Donair",
+    label: "donair (conuhacks winner)", year: 2026, slug: "Donair",
     href: "https://devpost.com/software/flowstate-7ihg10",
     preview: "/previews/donair.mp4",
     startAt: 3,
@@ -72,14 +73,14 @@ const projectChannels = [
     external: true,
   },
   {
-    label: "bobby (hackers and healers winner)", slug: "Bobby",
+    label: "bobby (hackers and healers winner)", year: 2026, slug: "Bobby",
     href: "https://devpost.com/software/onthepulse",
     preview: "/previews/bobby-demo-h264.mp4",
     poster: "/previews/devpost-bobby.png",
     external: true,
   },
   {
-    label: "lorawat (ssi-canada hackathon winner)", slug: "LoRaWAT",
+    label: "lorawat (ssi-canada hackathon winner)", year: 2026, slug: "LoRaWAT",
     href: "https://devpost.com/software/computer-networks-hackathon-ssi-canada",
     preview: "/previews/devpost-lorawat.jpg",
     slideshow: [
@@ -92,7 +93,7 @@ const projectChannels = [
     external: true,
   },
   {
-    label: "kompas (hack the north)", slug: "Kompas",
+    label: "kompas (hack the north)", year: 2025, slug: "Kompas",
     href: "https://devpost.com/software/kompas",
     preview: "/previews/devpost-kompas.png",
     slideshow: [
@@ -106,25 +107,25 @@ const projectChannels = [
 ] satisfies DirectoryItem[];
 
 const websiteChannels: DirectoryItem[] = [
-  { label: "hackthehill.com design", slug: "Hack the Hill", href: "https://hackthehill.com", preview: WEBSITE_CAPTURE_MEDIA,
+  { label: "hackthehill.com design", year: 2026, slug: "Hack the Hill", href: "https://hackthehill.com", preview: WEBSITE_CAPTURE_MEDIA,
     webCapture: "/channels/hack-the-hill-web-capture.jpg", external: true },
-  { label: "stupideas.com design", slug: "Stupideas", href: "https://stupideas.com", preview: WEBSITE_CAPTURE_MEDIA,
+  { label: "stupideas.com design", year: 2026, slug: "Stupideas", href: "https://stupideas.com", preview: WEBSITE_CAPTURE_MEDIA,
     webCapture: "/channels/stupideas-web-capture.jpg", external: true },
-  { label: "mathematech.com design", slug: "Mthmtech", href: "https://mthm.tech", preview: WEBSITE_CAPTURE_MEDIA,
+  { label: "mathematech.com design", year: 2026, slug: "Mthmtech", href: "https://mthm.tech", preview: WEBSITE_CAPTURE_MEDIA,
     webCapture: "/channels/mthmtech-web-capture.jpg", external: true },
 ];
 
 const contentChannels: DirectoryItem[] = [
   defaultPreview,
   {
-    label: "screensaver", slug: "Pipes Screensaver",
+    label: "screensaver", year: 2023, slug: "Pipes Screensaver",
     href: "",
     preview: PIPES_SCREENSAVER_MEDIA,
     description: "This was just a cool screensaver.",
     creationDate: "2026-08-26",
   },
   {
-    label: "large green shopping bag", slug: "Shopify",
+    label: "large green shopping bag", year: 2024, slug: "Shopify",
     href: "https://internships.shopify.com/",
     preview: SHOPIFY_ASCII_MEDIA,
     description:
@@ -133,7 +134,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "loading screens", slug: "TGJ2O0",
+    label: "loading screens", year: 2022, slug: "TGJ2O0",
     href: "https://www.youtube.com/watch?v=pzAtMuLGgs0",
     preview: "/channels/animation-project-1.mp4",
     description:
@@ -143,7 +144,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "bee and flower", slug: "Bee and Flower",
+    label: "bee and flower", year: 2022, slug: "Bee and Flower",
     href: "https://www.youtube.com/watch?v=CxNt9lZIcDI",
     preview: "/channels/animation-project-2.mp4",
     description:
@@ -153,7 +154,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "text-to-sql presentation", slug: "Text-to-SQL",
+    label: "text-to-sql presentation", year: 2025, slug: "Text-to-SQL",
     href: "https://www.youtube.com/watch?v=_9E5xJQrnaQ",
     preview: "/channels/text-to-sql.mp4",
     description:
@@ -165,7 +166,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "amr surveillance bias", slug: "AMR Surveillance Bias",
+    label: "amr surveillance bias", year: 2026, slug: "AMR Surveillance Bias",
     href: "https://github.com/afaqmvirk/cat",
     preview: "/channels/amr-surveillance-bias.mp4",
     description: "A research paper I presented.",
@@ -175,7 +176,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "tutoring chemistry", slug: "Balancing Chemical Equations",
+    label: "tutoring chemistry", year: 2025, slug: "Balancing Chemical Equations",
     href: "https://mthm.tech",
     preview: "/channels/chemical-equations.mp4",
     description:
@@ -186,7 +187,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "relatom language", slug: "Relatom",
+    label: "relatom language", year: 2025, slug: "Relatom",
     href: "https://github.com/afaqmvirk/relatom",
     preview: "/channels/relatom.mp4",
     description:
@@ -197,7 +198,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "websockets demo", slug: "WebSocket Collaboration",
+    label: "websockets demo", year: 2025, slug: "WebSocket Collaboration",
     href: "https://calendar.carleton.ca/search/?P=COMP%202406",
     preview: "/channels/websocket-collaboration.mp4",
     description: "Another project for my COMP 2406 class.",
@@ -207,7 +208,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "leetcode games 1B (2025)", slug: "LC Games",
+    label: "leetcode games 1B", year: 2025, slug: "LC Games",
     href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/leetcode-games.mp4",
     description:
@@ -217,7 +218,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "portalpants", slug: "PortalPants",
+    label: "portalpants", year: 2021, slug: "PortalPants",
     href: "https://www.instagram.com/romanianspongebob/",
     preview: "/channels/portalpants.mp4",
     description:
@@ -227,7 +228,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "kahoot clone demo", slug: "COMP2406B Final Project",
+    label: "kahoot clone demo", year: 2025, slug: "COMP2406B Final Project",
     href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
     preview: "/channels/comp2406b-final-project.mp4",
     description:
@@ -238,7 +239,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "leetcode games 3 (2025)", slug: "Krusty Kalkulations",
+    label: "leetcode games 3", year: 2025, slug: "Krusty Kalkulations",
     href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/krusty-kalkulations.mp4",
     description:
@@ -248,7 +249,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "karen (uottahack 8)", slug: "K.A.R.E.N.",
+    label: "karen (uottahack 8)", year: 2026, slug: "K.A.R.E.N.",
     href: "https://devpost.com/software/karen-5g01yk",
     preview: "/channels/karen-demo.mp4",
     description:
@@ -258,7 +259,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "school board trustee-ing", slug: "UCDSB Board Meeting",
+    label: "school board trustee-ing", year: 2023, slug: "UCDSB Board Meeting",
     href: "https://www.standard-freeholder.com/news/local-news/seaways-ali-and-ccvss-virk-elected-ucdsb-student-trustees",
     preview: "/channels/ucdsb-board-meeting.mp4",
     description:
@@ -268,7 +269,7 @@ const contentChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "elecholocation hardware research", slug: "Awards Ceremony",
+    label: "elecholocation hardware research", year: 2023, slug: "Awards Ceremony",
     href: "https://www.cornwallseawaynews.com/education/ccvs-student-represents-canada-at-international-science-fair/",
     preview: "/channels/awards-ceremony.mp4",
     description: 'The elusive origin of "afork veerq."',
@@ -307,31 +308,31 @@ function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
 
 const socialItems: DirectoryItem[] = [
   {
-    label: "afaq's instagram", slug: "instagram", socialKey: "instagram",
+    label: "afaq's instagram", year: 2019, slug: "instagram", socialKey: "instagram",
     href: "https://instagram.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.instagram,
     external: true,
   },
   {
-    label: "afaq's linkedin", slug: "linkedin", socialKey: "linkedin",
+    label: "afaq's linkedin", year: 2022, slug: "linkedin", socialKey: "linkedin",
     href: "https://linkedin.com/in/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.linkedin,
     external: true,
   },
   {
-    label: "afaq's github", slug: "github", socialKey: "github",
+    label: "afaq's github", year: 2020, slug: "github", socialKey: "github",
     href: "https://github.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.github,
     external: true,
   },
   {
-    label: "afaq's twitter", slug: "x (twitter)", socialKey: "x (twitter)",
+    label: "afaq's twitter", year: 2020, slug: "x (twitter)", socialKey: "x (twitter)",
     href: "https://x.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA["x (twitter)"],
     external: true,
   },
   {
-    label: "afaq's kahoot profile", slug: "kahoot", socialKey: "kahoot",
+    label: "afaq's kahoot profile", year: 2021, slug: "kahoot", socialKey: "kahoot",
     href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
     preview: SOCIAL_SCREENSAVER_MEDIA.kahoot,
     external: true,
@@ -350,7 +351,7 @@ const rightSections: DirectorySection[] = [
     title: "Others",
     items: [
       {
-        label: "afaq's resume", slug: "resume",
+        label: "afaq's resume", year: 2026, slug: "resume",
         href: "/resume.pdf",
         preview: RESUME_TERMINAL_MEDIA,
         external: true,
@@ -366,6 +367,7 @@ const tvChannels: DirectoryItem[] = [
   ...directoryItems,
   {
     label: "marl project proposal",
+    year: 2026,
     href: "https://5801.afaq.mov/prelim-video",
     preview: "/channels/marl-project-proposal.mp4",
     startAt: 361,
@@ -374,7 +376,6 @@ const tvChannels: DirectoryItem[] = [
   },
 ];
 const guideChannels = tvChannels;
-const guideLabels = guideChannels.map((item) => item.label);
 const CRT_STATIC_TRANSITION_MS = 700;
 // Set to true to restore the channel title strip and description panel.
 const VIDEO_METADATA_OVERLAYS_ENABLED = false;
@@ -956,7 +957,7 @@ export default function Index() {
         <ResumeTerminalCanvas active={selectedPreview.preview === RESUME_TERMINAL_MEDIA} />
         <SocialScreensaverCanvases activeSocial={selectedPreview.socialKey ?? selectedPreview.label} />
         <WebsiteCaptureCanvas source={selectedPreview.webCapture} />
-        <ChannelGuideCanvas labels={guideLabels} offset={guideOffset}
+        <ChannelGuideCanvas channels={guideChannels} offset={guideOffset}
           focused={guideFocused} active={isChannelGuideOpen && isTvModelReady} />
         {/* This hero was inspired and implemented based on the implementation at https://crazygl.com/hero/vhs-product-screen */}
         {/* Original implementation by @ybouane https://x.com/ybouane */}
@@ -1055,7 +1056,7 @@ export default function Index() {
                     onClick={() => selectGuideChannel(item, index)}>
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <span>{item.label}</span>
-                    <span aria-hidden="true">{selectedPreview === item ? "◀" : ""}</span>
+                    <span>{item.year}</span>
                   </button>
                 ))}
               </div>

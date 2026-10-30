@@ -305,6 +305,7 @@ body {
   align-items: center;
   cursor: pointer;
 }
+.crt-channel-guide__item > :last-child { margin-left: auto; }
 .crt-channel-guide__footer { height: 18%; flex-shrink: 0; }
 
 @keyframes crt-control-pulse {
