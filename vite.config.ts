@@ -1,6 +1,15 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig, type Plugin } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+
+// The CRT dependency is patched below. Give its wrapper and lazy renderer a
+// shared content version so browsers cannot retain an older dependency module
+// when only this config changes during local development.
+const crtRendererRevision = createHash("sha256")
+  .update(readFileSync(new URL("./vite.config.ts", import.meta.url)))
+  .digest("hex").slice(0, 12);
 
 declare module "@remix-run/node" {
   interface Future {
@@ -545,12 +554,15 @@ function publishCrtDialPositions(canvas, sceneObj, camera, state, elapsed, width
     const specs = [
         { name: 'channel', x: dialSpecs[0].x, y: dialSpecs[0].y },
         { name: 'volume', x: dialSpecs[1].x, y: dialSpecs[1].y },
+        { name: 'guide',
+          x: crtMobileLayoutActive ? CRT_PANEL_DEST_MIN_X + (0.0220524 - CRT_CONTROL_MIN_Y) * CRT_PANEL_X_SCALE : 0.4105316,
+          y: crtMobileLayoutActive ? CRT_PANEL_DEST_TOP_Y - (0.4105316 - CRT_PANEL_SEAM_X) : 0.0220524 },
     ];
     for (const spec of specs) {
         const center = state.center.set(spec.x, spec.y, 0.166)
             .applyMatrix4(sceneObj.matrixWorld)
             .project(camera);
-        const edge = state.edge.set(spec.x + 0.0605, spec.y, 0.166)
+        const edge = state.edge.set(spec.x + (spec.name === 'guide' ? 0.017 : 0.0605), spec.y, 0.166)
             .applyMatrix4(sceneObj.matrixWorld)
             .project(camera);
         const x = (center.x * 0.5 + 0.5) * width;
@@ -575,6 +587,8 @@ function publishCrtDialPositions(canvas, sceneObj, camera, state, elapsed, width
     }
     if (!state.readyPublished) {
         state.readyPublished = true;
+        host.dataset.crtReady = 'true';
+        host.dataset.crtRenderer = '${crtRendererRevision}';
         host.dispatchEvent(new CustomEvent('crt-model-ready', { bubbles: true }));
     }
 }`;
@@ -807,23 +821,30 @@ function drawCrtVolumeCanvas(canvas, level) {
     if (!context || !Number.isFinite(level))
         return false;
     const volumeLevel = Math.max(0, Math.min(4, Math.round(level)));
-    const barWidth = 28;
-    const barGap = 12;
-    const baseX = 62;
-    const baseY = canvas.height - 52;
+    const segmentCount = 32;
+    const baseX = 72;
+    const baseY = canvas.height - 66;
+    const meterWidth = canvas.width - baseX * 2;
+    const step = meterWidth / segmentCount;
+    const barWidth = step * 0.58;
+    const filledSegments = Math.round(volumeLevel / 4 * segmentCount);
     context.save();
-    context.lineWidth = 5;
+    context.font = '500 36px "Geist Pixel Square", monospace';
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
+    context.lineWidth = 4;
     context.lineJoin = 'round';
     context.strokeStyle = '#185dff';
-    for (let index = 0; index < 4; index += 1) {
-        const height = 24 + index * 13;
-        const x = baseX + index * (barWidth + barGap);
-        const y = baseY - height;
-        if (index < volumeLevel) {
-            context.fillStyle = '#ffffff';
-            context.fillRect(x, y, barWidth, height);
-        }
+    context.strokeText('VOLUME', baseX, baseY - 42);
+    context.fillStyle = '#ffffff';
+    context.fillText('VOLUME', baseX, baseY - 42);
+    for (let index = 0; index < segmentCount; index += 1) {
+        const filled = index < filledSegments;
+        const x = baseX + index * step;
+        const height = filled ? 26 : 4;
+        const y = baseY - 26 + (filled ? 0 : 11);
         context.strokeRect(x, y, barWidth, height);
+        context.fillRect(x, y, barWidth, height);
     }
     context.restore();
     return true;
@@ -1022,6 +1043,17 @@ const fixCrazyGlModelPaths = (): Plugin => ({
   transform(code: string, id: string) {
     const modulePath = id.split("?", 1)[0].replaceAll("\\", "/");
 
+    if (modulePath.endsWith("/app/routes/_index.tsx")) {
+      return code.replace(
+        'from "@crazygl/hero-vhs-product-screen"',
+        `from "@crazygl/hero-vhs-product-screen?crt=${crtRendererRevision}"`,
+      );
+    }
+    if (modulePath.endsWith("@crazygl/hero-vhs-product-screen/dist/index.js")) {
+      return code.replace("import('./VhsScreenStage')",
+        `import('./VhsScreenStage.js?crt=${crtRendererRevision}')`);
+    }
+
     if (
       !modulePath.endsWith(
         "@crazygl/hero-vhs-product-screen/dist/VhsScreenStage.js",
@@ -1087,7 +1119,9 @@ uniform float u_stretchMedia;           // stretch all media to the tube`,
         "uniform sampler2D u_screenMedia;",
         `uniform sampler2D u_screenMedia;
 uniform sampler2D u_captionTexture;
-uniform float u_haveCaption;`,
+uniform float u_haveCaption;
+uniform sampler2D u_guideTexture;
+uniform float u_haveGuide;`,
       )
       .replace(
         "return texture2D(u_screenMedia, mediaUV).rgb;",
@@ -1104,9 +1138,18 @@ uniform float u_haveCaption;`,
 	float sourcePeak = max(max(mediaColor.r, mediaColor.g), mediaColor.b);
 	float sourceHighlight = smoothstep(0.55, 1.0, sourcePeak);
 	mediaColor *= mix(1.0, 0.80, sourceHighlight);
-	if (u_haveCaption > 0.5) {
+	if (u_haveCaption > 0.5 && u_haveGuide < 0.5) {
 		vec4 captionColor = texture2D(u_captionTexture, mediaUV);
 		mediaColor = mix(mediaColor, captionColor.rgb, captionColor.a);
+	}
+	if (u_haveGuide > 0.5) {
+		// A deep cool color burn keeps moving footage visible beneath the
+		// translucent guide. Composite text afterwards to keep it legible.
+		vec3 burned = 1.0 - min(vec3(1.0),
+			(1.0 - clamp(mediaColor, 0.0, 1.0)) / vec3(0.50, 0.58, 0.72));
+		mediaColor = mix(mediaColor, burned, 0.80);
+		vec4 guideColor = texture2D(u_guideTexture, tubeUv);
+		mediaColor = mix(mediaColor, guideColor.rgb, guideColor.a);
 	}
 	return mediaColor;`,
       )
@@ -1120,6 +1163,8 @@ uniform float u_haveCaption;`,
         "u_screenMedia: { value: null },",
         `u_screenMedia: { value: null },
                 u_captionTexture: { value: null },
+                u_guideTexture: { value: null },
+                u_haveGuide: { value: 0.0 },
                 u_haveCaption: { value: 0.0 },`,
       )
       .replace(
@@ -1173,6 +1218,8 @@ uniform float u_haveCaption;`,
     const crtDialProjectionRef = React.useRef(createCrtDialProjectionState());
     const crtScreenProjectionRef = React.useRef(createCrtScreenProjectionState());
     const canvasTextureVersionRef = React.useRef(-1);
+    const guideScreenMeshRef = React.useRef(null);
+    const guideTextureRef = React.useRef(null);
     React.useEffect(() => {
         let system = null;
         try {
@@ -1186,6 +1233,71 @@ uniform float u_haveCaption;`,
             audioProgramCleanupRef.current = null;
             audioSystemRef.current = null;
             destroyCrtAudioSystem(system);
+        };
+    }, []);
+    React.useEffect(() => {
+        // Use the actual curved screen UVs for guide hit testing, including
+        // parallax, barrel distortion and the media's aspect-fit transform.
+        const handleGuideHit = (event) => {
+            const detail = event.detail;
+            const canvas = canvasRef.current;
+            if (!guideScreenMeshRef.current) {
+                modelObjRef.current?.traverse((node) => {
+                    if (!node.isMesh) return;
+                    const materials = Array.isArray(node.material) ? node.material : [node.material];
+                    if (materials.some((material) => material.map === rtRef.current?.texture))
+                        guideScreenMeshRef.current = node;
+                });
+            }
+            const mesh = guideScreenMeshRef.current || screenMeshRef.current;
+            const camera = cameraRef.current;
+            if (!detail || !canvas || !mesh || !camera) return;
+            const rect = canvas.getBoundingClientRect();
+            const ray = new THREE.Raycaster();
+            ray.setFromCamera(new THREE.Vector2(
+                (detail.clientX - rect.left) / rect.width * 2 - 1,
+                1 - (detail.clientY - rect.top) / rect.height * 2,
+            ), camera);
+            const hit = ray.intersectObject(mesh, false)[0];
+            if (!hit?.uv) return;
+            const uniforms = offscreenMatRef.current?.uniforms;
+            const uv = hit.uv.clone().subScalar(0.5);
+            uv.multiplyScalar(1 + uv.lengthSq() * (uniforms?.u_curvature?.value ?? 0.19));
+            detail.u = uv.x + 0.5;
+            detail.v = 0.5 - uv.y;
+        };
+        window.addEventListener('crt-guide-hit', handleGuideHit);
+        return () => window.removeEventListener('crt-guide-hit', handleGuideHit);
+    }, []);
+    React.useEffect(() => {
+        const handleGuideChange = (event) => {
+            const canvas = event.detail?.canvas;
+            const material = offscreenMatRef.current;
+            if (!material) return;
+            if (canvas) {
+                turnOnRef.current.elapsed = 999;
+                turnOnRef.current.active = false;
+                material.uniforms.u_turnOnPhase.value = 1;
+                if (!guideTextureRef.current) {
+                    guideTextureRef.current = new THREE.CanvasTexture(canvas);
+                    guideTextureRef.current.colorSpace = THREE.SRGBColorSpace;
+                }
+                guideTextureRef.current.needsUpdate = true;
+                material.uniforms.u_guideTexture.value = guideTextureRef.current;
+            }
+            material.uniforms.u_haveGuide.value = canvas ? 1 : 0;
+            rtPrimedRef.current = false;
+        };
+        const handleGuideTune = () => {
+            turnOnRef.current.elapsed = 0;
+            turnOnRef.current.active = true;
+        };
+        window.addEventListener('crt-guide-change', handleGuideChange);
+        window.addEventListener('crt-guide-tune', handleGuideTune);
+        return () => {
+            window.removeEventListener('crt-guide-change', handleGuideChange);
+            window.removeEventListener('crt-guide-tune', handleGuideTune);
+            guideTextureRef.current?.dispose();
         };
     }, []);
     React.useEffect(() => {

@@ -8,9 +8,10 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 import { SpeedInsights } from "@vercel/speed-insights/remix";
 
-import "./tailwind.css";
+import baseStyles from "./tailwind.css?url";
 
 export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: baseStyles },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",

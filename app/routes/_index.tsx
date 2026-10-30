@@ -1,15 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
 import VhsProductScreen from "@crazygl/hero-vhs-product-screen";
 import {
-  type CSSProperties,
-  type KeyboardEvent as ReactKeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
-  type PointerEvent as ReactPointerEvent,
   useEffect,
   useRef,
   useState,
 } from "react";
 import CrtCaptionController from "~/components/CrtCaptionController";
+import WebsiteCaptureCanvas, { WEBSITE_CAPTURE_MEDIA } from "~/components/WebsiteCaptureCanvas";
+import ChannelGuideCanvas from "~/components/ChannelGuideCanvas";
 import HeroPreviewCanvas, {
   HERO_PREVIEW_MEDIA,
 } from "~/components/HeroPreviewCanvas";
@@ -28,6 +26,8 @@ import SocialScreensaverCanvases, {
 
 type DirectoryItem = {
   label: string;
+  slug?: string;
+  socialKey?: string;
   href: string;
   preview: string;
   description?: string;
@@ -39,6 +39,7 @@ type DirectoryItem = {
   captionTrack?: string;
   poster?: string;
   external?: boolean;
+  webCapture?: string;
 };
 
 type DirectorySection = {
@@ -47,7 +48,7 @@ type DirectorySection = {
 };
 
 const defaultPreview: DirectoryItem = {
-  label: "Afaq Virk",
+  label: "homepage", slug: "Afaq Virk",
   href: "/",
   preview: HERO_PREVIEW_MEDIA,
   description:
@@ -57,13 +58,13 @@ const defaultPreview: DirectoryItem = {
 
 const projectChannels = [
   {
-    label: "LogiClaw",
+    label: "logiclaw (logitech hackathon winner)", slug: "LogiClaw",
     href: "https://devpost.com/software/logiclaw",
     preview: "/previews/devpost-logiclaw.jpg",
     external: true,
   },
   {
-    label: "Donair",
+    label: "donair (conuhacks winner)", slug: "Donair",
     href: "https://devpost.com/software/flowstate-7ihg10",
     preview: "/previews/donair.mp4",
     startAt: 3,
@@ -71,14 +72,14 @@ const projectChannels = [
     external: true,
   },
   {
-    label: "Bobby",
+    label: "bobby (hackers and healers winner)", slug: "Bobby",
     href: "https://devpost.com/software/onthepulse",
     preview: "/previews/bobby-demo-h264.mp4",
     poster: "/previews/devpost-bobby.png",
     external: true,
   },
   {
-    label: "LoRaWAT",
+    label: "lorawat (ssi-canada hackathon winner)", slug: "LoRaWAT",
     href: "https://devpost.com/software/computer-networks-hackathon-ssi-canada",
     preview: "/previews/devpost-lorawat.jpg",
     slideshow: [
@@ -91,7 +92,7 @@ const projectChannels = [
     external: true,
   },
   {
-    label: "Kompas",
+    label: "kompas (hack the north)", slug: "Kompas",
     href: "https://devpost.com/software/kompas",
     preview: "/previews/devpost-kompas.png",
     slideshow: [
@@ -104,17 +105,26 @@ const projectChannels = [
   },
 ] satisfies DirectoryItem[];
 
-const tvChannels: DirectoryItem[] = [
+const websiteChannels: DirectoryItem[] = [
+  { label: "hackthehill.com design", slug: "Hack the Hill", href: "https://hackthehill.com", preview: WEBSITE_CAPTURE_MEDIA,
+    webCapture: "/channels/hack-the-hill-web-capture.jpg", external: true },
+  { label: "stupideas.com design", slug: "Stupideas", href: "https://stupideas.com", preview: WEBSITE_CAPTURE_MEDIA,
+    webCapture: "/channels/stupideas-web-capture.jpg", external: true },
+  { label: "mathematech.com design", slug: "Mthmtech", href: "https://mthm.tech", preview: WEBSITE_CAPTURE_MEDIA,
+    webCapture: "/channels/mthmtech-web-capture.jpg", external: true },
+];
+
+const contentChannels: DirectoryItem[] = [
   defaultPreview,
   {
-    label: "3D pipes",
+    label: "screensaver", slug: "Pipes Screensaver",
     href: "",
     preview: PIPES_SCREENSAVER_MEDIA,
     description: "This was just a cool screensaver.",
     creationDate: "2026-08-26",
   },
   {
-    label: "Shopify ASCII",
+    label: "large green shopping bag", slug: "Shopify",
     href: "https://internships.shopify.com/",
     preview: SHOPIFY_ASCII_MEDIA,
     description:
@@ -123,7 +133,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Animation Project 1",
+    label: "loading screens", slug: "TGJ2O0",
     href: "https://www.youtube.com/watch?v=pzAtMuLGgs0",
     preview: "/channels/animation-project-1.mp4",
     description:
@@ -133,7 +143,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Animation Project 2",
+    label: "bee and flower", slug: "Bee and Flower",
     href: "https://www.youtube.com/watch?v=CxNt9lZIcDI",
     preview: "/channels/animation-project-2.mp4",
     description:
@@ -143,7 +153,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Text-to-SQL",
+    label: "text-to-sql presentation", slug: "Text-to-SQL",
     href: "https://www.youtube.com/watch?v=_9E5xJQrnaQ",
     preview: "/channels/text-to-sql.mp4",
     description:
@@ -155,7 +165,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "AMR Surveillance Bias",
+    label: "amr surveillance bias", slug: "AMR Surveillance Bias",
     href: "https://github.com/afaqmvirk/cat",
     preview: "/channels/amr-surveillance-bias.mp4",
     description: "A research paper I presented.",
@@ -165,7 +175,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Balancing Chemical Equations",
+    label: "tutoring chemistry", slug: "Balancing Chemical Equations",
     href: "https://mthm.tech",
     preview: "/channels/chemical-equations.mp4",
     description:
@@ -176,7 +186,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Relatom",
+    label: "relatom language", slug: "Relatom",
     href: "https://github.com/afaqmvirk/relatom",
     preview: "/channels/relatom.mp4",
     description:
@@ -187,7 +197,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "WebSocket Collaboration",
+    label: "websockets demo", slug: "WebSocket Collaboration",
     href: "https://calendar.carleton.ca/search/?P=COMP%202406",
     preview: "/channels/websocket-collaboration.mp4",
     description: "Another project for my COMP 2406 class.",
@@ -197,7 +207,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "LC Games",
+    label: "leetcode games 1B (2025)", slug: "LC Games",
     href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/leetcode-games.mp4",
     description:
@@ -207,7 +217,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "PortalPants",
+    label: "portalpants", slug: "PortalPants",
     href: "https://www.instagram.com/romanianspongebob/",
     preview: "/channels/portalpants.mp4",
     description:
@@ -217,7 +227,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "COMP2406B Final Project",
+    label: "kahoot clone demo", slug: "COMP2406B Final Project",
     href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
     preview: "/channels/comp2406b-final-project.mp4",
     description:
@@ -228,7 +238,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Krusty Kalkulations",
+    label: "leetcode games 3 (2025)", slug: "Krusty Kalkulations",
     href: "https://github.com/afaqmvirk/carleton-leetcode-bootcamp-2025",
     preview: "/channels/krusty-kalkulations.mp4",
     description:
@@ -238,7 +248,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "K.A.R.E.N.",
+    label: "karen (uottahack 8)", slug: "K.A.R.E.N.",
     href: "https://devpost.com/software/karen-5g01yk",
     preview: "/channels/karen-demo.mp4",
     description:
@@ -248,7 +258,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "UCDSB Board Meeting",
+    label: "school board trustee-ing", slug: "UCDSB Board Meeting",
     href: "https://www.standard-freeholder.com/news/local-news/seaways-ali-and-ccvss-virk-elected-ucdsb-student-trustees",
     preview: "/channels/ucdsb-board-meeting.mp4",
     description:
@@ -258,7 +268,7 @@ const tvChannels: DirectoryItem[] = [
     external: true,
   },
   {
-    label: "Awards Ceremony",
+    label: "elecholocation hardware research", slug: "Awards Ceremony",
     href: "https://www.cornwallseawaynews.com/education/ccvs-student-represents-canada-at-international-science-fair/",
     preview: "/channels/awards-ceremony.mp4",
     description: 'The elusive origin of "afork veerq."',
@@ -266,17 +276,8 @@ const tvChannels: DirectoryItem[] = [
     captionTrack: "/captions/awards-ceremony.json",
     external: true,
   },
-  {
-    label: "COMP 5801 Preliminary Proposal",
-    startAt: 300,
-    href: "https://5801.afaq.mov/prelim-video",
-    preview: "https://4sxl9efygqhjgnhy.public.blob.vercel-storage.com/prelim-video/stream-v1/lunar-720-49df0119431d.mp4",
-    description:
-      "Our preliminary proposal presentation on cooperative lunar mapping for COMP 5801.",
-    screenFit: "contain",
-    external: true,
-  },
   ...projectChannels,
+  ...websiteChannels,
 ];
 
 function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
@@ -306,31 +307,31 @@ function pickWeightedChannel(currentChannel: number, visitCounts: number[]) {
 
 const socialItems: DirectoryItem[] = [
   {
-    label: "instagram",
+    label: "afaq's instagram", slug: "instagram", socialKey: "instagram",
     href: "https://instagram.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.instagram,
     external: true,
   },
   {
-    label: "linkedin",
+    label: "afaq's linkedin", slug: "linkedin", socialKey: "linkedin",
     href: "https://linkedin.com/in/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.linkedin,
     external: true,
   },
   {
-    label: "github",
+    label: "afaq's github", slug: "github", socialKey: "github",
     href: "https://github.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA.github,
     external: true,
   },
   {
-    label: "x (twitter)",
+    label: "afaq's twitter", slug: "x (twitter)", socialKey: "x (twitter)",
     href: "https://x.com/afaqmvirk",
     preview: SOCIAL_SCREENSAVER_MEDIA["x (twitter)"],
     external: true,
   },
   {
-    label: "kahoot",
+    label: "afaq's kahoot profile", slug: "kahoot", socialKey: "kahoot",
     href: "https://create.kahoot.it/profiles/35e825e0-8026-49fe-89c5-74cf77bccee3",
     preview: SOCIAL_SCREENSAVER_MEDIA.kahoot,
     external: true,
@@ -346,37 +347,10 @@ const leftSections: DirectorySection[] = [
 
 const rightSections: DirectorySection[] = [
   {
-    title: "Websites",
-    items: [
-      {
-        label: "hackthehill",
-        href: "https://hackthehill.com",
-        preview: "/previews/hack-the-hill.png",
-        external: true,
-      },
-      {
-        label: "stupideas",
-        href: "https://stupideas.com",
-        preview: "/channels/sih-site-scroll.mp4",
-        poster: "/previews/stupid-ideas.png",
-        screenFit: "contain",
-        description:
-          "The website I built for the Stupid Ideas Hackathon community.",
-        external: true,
-      },
-      {
-        label: "mthmtech",
-        href: "https://mthm.tech",
-        preview: "/previews/mathematech.png",
-        external: true,
-      },
-    ],
-  },
-  {
     title: "Others",
     items: [
       {
-        label: "resume",
+        label: "afaq's resume", slug: "resume",
         href: "/resume.pdf",
         preview: RESUME_TERMINAL_MEDIA,
         external: true,
@@ -387,12 +361,20 @@ const rightSections: DirectorySection[] = [
 
 const directorySections = [...leftSections, ...rightSections];
 const directoryItems = directorySections.flatMap((section) => section.items);
-const mobileDirectoryItems = directorySections
-  .filter((section) => section.title !== "Socials")
-  .flatMap((section) =>
-    section.items.map((item) => ({ ...item, sectionTitle: section.title })),
-  );
-const MOBILE_WHEEL_ROW_HEIGHT = 48;
+const tvChannels: DirectoryItem[] = [
+  ...contentChannels,
+  ...directoryItems,
+  {
+    label: "marl project proposal",
+    href: "https://5801.afaq.mov/prelim-video",
+    preview: "/channels/marl-project-proposal.mp4",
+    startAt: 361,
+    description: "Our COMP 4900/5801 cooperative lunar-mapping MARL project proposal.",
+    external: true,
+  },
+];
+const guideChannels = tvChannels;
+const guideLabels = guideChannels.map((item) => item.label);
 const CRT_STATIC_TRANSITION_MS = 700;
 // Set to true to restore the channel title strip and description panel.
 const VIDEO_METADATA_OVERLAYS_ENABLED = false;
@@ -400,7 +382,7 @@ const PLACEHOLDER_CHANNEL_DESCRIPTION =
   "Placeholder channel description. A short summary of this channel will go here.";
 
 function directoryChannelHref(item: DirectoryItem) {
-  const slug = item.label
+  const slug = (item.slug ?? item.label)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
@@ -448,14 +430,8 @@ function publishChannelOverlay(
 }
 
 function publishDirectoryChannelOverlay(item: DirectoryItem) {
-  const directoryIndex = directoryItems.findIndex(
-    (candidate) =>
-      candidate.label === item.label && candidate.href === item.href,
-  );
-  publishChannelOverlay(
-    item,
-    tvChannels.length + Math.max(0, directoryIndex) + 1,
-  );
+  const index = tvChannels.findIndex((candidate) => candidate === item);
+  publishChannelOverlay(item, Math.max(0, index) + 1);
 }
 
 // VhsProductScreen renders with a 36-degree perspective camera at z=4.2.
@@ -511,6 +487,8 @@ function DirectoryColumn({
               <li key={item.label}>
                 <a
                   href={item.href}
+                  aria-label={item.label}
+                  title={item.label}
                   onMouseEnter={() => onPreview(item)}
                   onMouseLeave={onPreviewEnd}
                   onFocus={() => onPreview(item)}
@@ -519,7 +497,7 @@ function DirectoryColumn({
                     ? { target: "_blank", rel: "noreferrer" }
                     : {})}
                 >
-                  {item.label}
+                  <img src={socialIconSources[item.socialKey ?? item.label]} alt="" />
                 </a>
               </li>
             ))}
@@ -530,15 +508,15 @@ function DirectoryColumn({
   );
 }
 
-function MobileSocialLinks() {
-  const iconSources: Record<string, string> = {
+const socialIconSources: Record<string, string> = {
     instagram: "/instagram.svg",
     linkedin: "/linkedin.svg",
     github: "/github.svg",
     "x (twitter)": "/x.svg",
     kahoot: "/kahoot.png",
-  };
+};
 
+function MobileSocialLinks() {
   return (
     <nav className="mobile-social-links" aria-label="Social links">
       {socialItems.map((item) => (
@@ -550,197 +528,10 @@ function MobileSocialLinks() {
           aria-label={item.label}
           title={item.label}
         >
-          <img src={iconSources[item.label]} alt="" />
+          <img src={socialIconSources[item.socialKey ?? item.label]} alt="" />
         </a>
       ))}
-    </nav>
-  );
-}
-
-function MobileDirectoryWheel({
-  items,
-  onPreview,
-  onPreviewEnd,
-}: {
-  items: Array<DirectoryItem & { sectionTitle: string }>;
-  onPreview: (item: DirectoryItem) => void;
-  onPreviewEnd: () => void;
-}) {
-  const [position, setPosition] = useState(0);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const positionRef = useRef(0);
-  const selectedIndexRef = useRef(0);
-  const dragRef = useRef({
-    active: false,
-    startY: 0,
-    startPosition: 0,
-    startIndex: 0,
-    moved: false,
-    suppressClick: false,
-  });
-
-  const clampPosition = (value: number) =>
-    Math.min(items.length - 1, Math.max(0, value));
-
-  const selectPosition = (nextPosition: number, preview = true) => {
-    const clampedPosition = clampPosition(nextPosition);
-    const nextIndex = Math.round(clampedPosition);
-    positionRef.current = clampedPosition;
-    setPosition(clampedPosition);
-    if (nextIndex !== selectedIndexRef.current) {
-      selectedIndexRef.current = nextIndex;
-      setSelectedIndex(nextIndex);
-      if (preview) onPreview(items[nextIndex]);
-    }
-  };
-
-  const snapToIndex = (index: number) => {
-    const nextIndex = Math.round(clampPosition(index));
-    selectedIndexRef.current = nextIndex;
-    positionRef.current = nextIndex;
-    setSelectedIndex(nextIndex);
-    setPosition(nextIndex);
-  };
-
-  useEffect(() => {
-    return onPreviewEnd;
-    // Clear a held preview if the wheel unmounts during a gesture.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const itemIndexFromEvent = (event: ReactPointerEvent<HTMLElement>) => {
-    const target = event.target as HTMLElement;
-    const item = target.closest<HTMLElement>("[data-wheel-index]");
-    const index = Number(item?.dataset.wheelIndex);
-    return Number.isFinite(index) ? index : selectedIndexRef.current;
-  };
-
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (!event.isPrimary || event.button !== 0) return;
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      active: true,
-      startY: event.clientY,
-      startPosition: positionRef.current,
-      startIndex: itemIndexFromEvent(event),
-      moved: false,
-      suppressClick: false,
-    };
-    setIsDragging(true);
-    onPreview(items[selectedIndexRef.current]);
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    if (!drag.active || !event.isPrimary) return;
-    const deltaY = event.clientY - drag.startY;
-    if (Math.abs(deltaY) > 5) drag.moved = true;
-    selectPosition(
-      drag.startPosition - deltaY / MOBILE_WHEEL_ROW_HEIGHT,
-      true,
-    );
-  };
-
-  const finishPointerGesture = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const drag = dragRef.current;
-    if (!drag.active) return;
-    drag.active = false;
-    drag.suppressClick = drag.moved;
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    setIsDragging(false);
-    if (!drag.moved && drag.startIndex !== selectedIndexRef.current) {
-      snapToIndex(drag.startIndex);
-    } else {
-      snapToIndex(Math.round(positionRef.current));
-    }
-    window.setTimeout(() => {
-      dragRef.current.suppressClick = false;
-    }, 0);
-  };
-
-  const handleItemClick = (
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    index: number,
-  ) => {
-    if (
-      dragRef.current.suppressClick ||
-      index !== selectedIndexRef.current
-    ) {
-      event.preventDefault();
-      if (!dragRef.current.suppressClick) snapToIndex(index);
-    }
-  };
-
-  const handleKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
-    event.preventDefault();
-    const direction = event.key === "ArrowDown" ? 1 : -1;
-    snapToIndex(selectedIndexRef.current + direction);
-  };
-
-  return (
-    <nav
-      className={`mobile-directory-wheel${
-        isDragging ? " mobile-directory-wheel--dragging" : ""
-      }`}
-      aria-label="Swipe to browse links"
-    >
-      <div
-        className="mobile-directory-wheel__viewport"
-        role="slider"
-        aria-label="Selected link"
-        aria-valuemin={0}
-        aria-valuemax={items.length - 1}
-        aria-valuenow={selectedIndex}
-        aria-valuetext={items[selectedIndex].label}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={finishPointerGesture}
-        onPointerCancel={finishPointerGesture}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-      >
-        <div className="mobile-directory-wheel__track">
-          {items.map((item, index) => {
-            const offset = index - position;
-            const distance = Math.abs(offset);
-            const scale = Math.max(0.66, 1 - distance * 0.115);
-            const opacity = Math.max(0, 1 - distance * 0.28);
-            const wheelStyle = {
-              "--wheel-y": `${offset * MOBILE_WHEEL_ROW_HEIGHT}px`,
-              "--wheel-tilt": `${Math.max(-62, Math.min(62, -offset * 18))}deg`,
-              "--wheel-scale": scale,
-              "--wheel-opacity": opacity,
-              "--wheel-blur": `${Math.max(0, distance - 1.4) * 0.75}px`,
-              zIndex: Math.max(1, 20 - Math.round(distance * 3)),
-            } as CSSProperties;
-
-            return (
-              <a
-                className={`mobile-directory-wheel__item${
-                  index === selectedIndex
-                    ? " mobile-directory-wheel__item--selected"
-                    : ""
-                }`}
-                data-wheel-index={index}
-                href={item.href}
-                key={`${item.sectionTitle}-${item.label}`}
-                style={wheelStyle}
-                aria-current={index === selectedIndex ? "true" : undefined}
-                onClick={(event) => handleItemClick(event, index)}
-                {...(item.external
-                  ? { target: "_blank", rel: "noreferrer" }
-                  : {})}
-              >
-                {item.label}
-              </a>
-            );
-          })}
-        </div>
-      </div>
+      <a href="/resume.pdf" className="mobile-resume-link" target="_blank" rel="noreferrer">resume</a>
     </nav>
   );
 }
@@ -751,6 +542,12 @@ export default function Index() {
   const [directoryChannel, setDirectoryChannel] =
     useState<DirectoryItem | null>(null);
   const [channel, setChannel] = useState(0);
+  const [isChannelGuideOpen, setIsChannelGuideOpen] = useState(false);
+  const [guideOffset, setGuideOffset] = useState(0);
+  const [guideFocused, setGuideFocused] = useState(0);
+  const guideButtonRef = useRef<HTMLButtonElement>(null);
+  const guideRef = useRef<HTMLDivElement>(null);
+  const guideHoverPointRef = useRef<{ clientX: number; clientY: number } | null>(null);
   const [slideshowIndex, setSlideshowIndex] = useState(0);
   const [slideshowTransitionActive, setSlideshowTransitionActive] =
     useState(false);
@@ -765,6 +562,7 @@ export default function Index() {
   const [usedControls, setUsedControls] = useState({
     channel: false,
     volume: false,
+    guide: false,
   });
   const [isHydrated, setIsHydrated] = useState(false);
   const [isMobileTvLayout, setIsMobileTvLayout] = useState(false);
@@ -788,12 +586,16 @@ export default function Index() {
       });
     });
     const updateMobileTvLayout = () => {
+      if (crtStage) delete crtStage.dataset.crtReady;
       setIsTvModelReady(false);
       setIsMobileTvLayout(mobileTvQuery.matches);
     };
     const handleTvModelReady = () => setIsTvModelReady(true);
 
-    updateMobileTvLayout();
+    setIsMobileTvLayout(mobileTvQuery.matches);
+    // Fast Refresh reruns this effect while retaining the mounted renderer.
+    // Recover its ready state instead of waiting for a one-time event again.
+    setIsTvModelReady(crtStage?.dataset.crtReady === "true");
     setIsHydrated(true);
     if (crtStage) resizeObserver.observe(crtStage);
     mobileTvQuery.addEventListener("change", updateMobileTvLayout);
@@ -808,6 +610,15 @@ export default function Index() {
 
   useEffect(() => {
     const syncDirectoryChannelFromHash = () => {
+      const regularIndex = tvChannels.findIndex(
+        (item) => directoryChannelHref(item) === window.location.hash,
+      );
+      if (regularIndex >= 0) {
+        setChannel(regularIndex);
+        setDirectoryChannel(null);
+        publishChannelOverlay(tvChannels[regularIndex], regularIndex + 1);
+        return;
+      }
       const matchingChannel =
         directoryItems.find(
           (item) => directoryChannelHref(item) === window.location.hash,
@@ -821,6 +632,44 @@ export default function Index() {
     return () =>
       window.removeEventListener("hashchange", syncDirectoryChannelFromHash);
   }, []);
+
+  useEffect(() => {
+    if (!isChannelGuideOpen) return;
+    const selected = guideRef.current?.querySelector<HTMLButtonElement>(
+      '[aria-current="true"]',
+    ) ?? guideRef.current?.querySelector<HTMLButtonElement>(".crt-channel-guide__item");
+    selected?.focus({ preventScroll: true });
+    selected?.scrollIntoView({ block: "nearest" });
+  }, [isChannelGuideOpen]);
+
+  useEffect(() => {
+    if (!isChannelGuideOpen) return;
+    const timer = window.setInterval(() => {
+      const point = guideHoverPointRef.current;
+      const list = guideRef.current?.querySelector<HTMLDivElement>(".crt-channel-guide__list");
+      if (!point || !list || list.clientHeight === 0) return;
+      const detail: { clientX: number; clientY: number; u?: number; v?: number } = { ...point };
+      window.dispatchEvent(new CustomEvent("crt-guide-hit", { detail }));
+      const { u, v } = detail;
+      if (u === undefined || v === undefined || u < .05 || u > .95 || v < .04 || v > .96) return;
+      if (u > .84 && v < .18) return;
+      const direction = v < .26 ? -1 : v > .74 ? 1 : 0;
+      if (!direction) return;
+      const rowHeight = list.clientHeight / 8;
+      const currentRow = Math.round(list.scrollTop / rowHeight);
+      const nextRow = Math.max(0, Math.min(guideChannels.length - 8, currentRow + direction));
+      if (nextRow === currentRow) return;
+      list.scrollTop = nextRow * rowHeight;
+      setGuideOffset(nextRow);
+      if (v >= .18 && v < .82) {
+        setGuideFocused(Math.min(guideChannels.length - 1, Math.floor(nextRow + (v - .18) / .08)));
+      }
+    }, 240);
+    return () => {
+      window.clearInterval(timer);
+      guideHoverPointRef.current = null;
+    };
+  }, [isChannelGuideOpen]);
 
   useEffect(() => {
     if (directoryChannel) publishDirectoryChannelOverlay(directoryChannel);
@@ -851,12 +700,12 @@ export default function Index() {
   const fittedModelScale = fitTvScaleToStage(stageAspect);
   const modelScale = isMobileTvLayout
     ? Math.min(1.16, fittedModelScale * 1.12)
-    : fittedModelScale;
+    : fittedModelScale * 0.9;
   const currentChannel = tvChannels[channel];
   const regularChannelActive =
     hoveredPreview === null && directoryChannel === null;
   const selectedPreview = hoveredPreview ?? directoryChannel ?? currentChannel;
-  const screenLinkHref = selectedPreview.href || null;
+  const screenLinkHref = isChannelGuideOpen ? null : selectedPreview.href || null;
   const screenLinkDestination = screenLinkHref
     ? formattedLinkDestination(screenLinkHref)
     : "";
@@ -1001,6 +850,7 @@ export default function Index() {
   };
 
   const turnChannelDial = () => {
+    setIsChannelGuideOpen(false);
     returnToRegularChannels(false);
     const nextChannel = pickWeightedChannel(
       channel,
@@ -1058,6 +908,34 @@ export default function Index() {
     setVolumeLevel(0);
   };
 
+  const closeChannelGuide = () => {
+    setIsChannelGuideOpen(false);
+    guideButtonRef.current?.focus();
+  };
+
+  const selectGuideChannel = (item: DirectoryItem, index: number) => {
+    clearPreview();
+    if (index < tvChannels.length) {
+      setDirectoryChannel(null);
+      setChannel(index);
+      channelVisitCountsRef.current[index] = (channelVisitCountsRef.current[index] ?? 0) + 1;
+    } else {
+      setDirectoryChannel(item);
+    }
+    window.history.replaceState(null, "", directoryChannelHref(item));
+    publishChannelOverlay(item, index + 1);
+    window.dispatchEvent(new CustomEvent("crt-guide-tune"));
+    setChannelTurns((turns) => turns + 1);
+    setUsedControls((controls) => ({ ...controls, channel: true }));
+    closeChannelGuide();
+  };
+
+  const guidePointerHit = (clientX: number, clientY: number) => {
+    const detail: { clientX: number; clientY: number; u?: number; v?: number } = { clientX, clientY };
+    window.dispatchEvent(new CustomEvent("crt-guide-hit", { detail }));
+    return detail;
+  };
+
   return (
     <main className="link-directory">
       <h1 className="sr-only">Afaq Virk</h1>
@@ -1075,8 +953,11 @@ export default function Index() {
           active={regularChannelActive && channel === 2}
           volume={volumeLevel / 4}
         />
-        <ResumeTerminalCanvas active={selectedPreview.label === "resume"} />
-        <SocialScreensaverCanvases activeSocial={selectedPreview.label} />
+        <ResumeTerminalCanvas active={selectedPreview.preview === RESUME_TERMINAL_MEDIA} />
+        <SocialScreensaverCanvases activeSocial={selectedPreview.socialKey ?? selectedPreview.label} />
+        <WebsiteCaptureCanvas source={selectedPreview.webCapture} />
+        <ChannelGuideCanvas labels={guideLabels} offset={guideOffset}
+          focused={guideFocused} active={isChannelGuideOpen && isTvModelReady} />
         {/* This hero was inspired and implemented based on the implementation at https://crazygl.com/hero/vhs-product-screen */}
         {/* Original implementation by @ybouane https://x.com/ybouane */}
         {/* Sharp 13LM16 TV model by TWIG-design: https://www.cgtrader.com/free-3d-models/electronics/video/old-vintage-sharp-13lm16-tv-3d-model */}
@@ -1123,6 +1004,62 @@ export default function Index() {
               pointerParallax={1}
               turnOnAnimation={!slideshow || slideshowTransitionActive}
             />
+          ) : null}
+          {isTvModelReady && isChannelGuideOpen ? (
+            <div className="crt-channel-guide" id="tv-channel-guide" ref={guideRef}
+              role="dialog" aria-label="TV channels"
+              onClickCapture={(event) => {
+                if (event.detail === 0) return; // Keyboard and assistive activation.
+                event.preventDefault();
+                event.stopPropagation();
+                const { u, v } = guidePointerHit(event.clientX, event.clientY);
+                if (u === undefined || v === undefined) return;
+                if (u > .84 && v < .18) { closeChannelGuide(); return; }
+                if (v < .18 || v >= .82 || u < .05 || u > .95) return;
+                const index = Math.floor(guideOffset + (v - .18) / .08);
+                if (guideChannels[index]) selectGuideChannel(guideChannels[index], index);
+              }}
+              onPointerMove={(event) => {
+                if (event.pointerType === "touch") return;
+                guideHoverPointRef.current = { clientX: event.clientX, clientY: event.clientY };
+                const { u, v } = guidePointerHit(event.clientX, event.clientY);
+                if (u === undefined || v === undefined || v < .18 || v >= .82) return;
+                const index = Math.floor(guideOffset + (v - .18) / .08);
+                if (guideChannels[index]) setGuideFocused(index);
+              }}
+              onPointerLeave={() => { guideHoverPointRef.current = null; }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") { event.preventDefault(); closeChannelGuide(); }
+                if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+                  event.preventDefault();
+                  const items = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".crt-channel-guide__item"));
+                  const current = items.indexOf(document.activeElement as HTMLButtonElement);
+                  const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1
+                    : (current + (event.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+                  items[next]?.focus();
+                }
+              }}>
+              <div className="crt-channel-guide__heading">
+                <span>CHANNEL GUIDE</span>
+                <button type="button" aria-label="Close channel guide" onClick={closeChannelGuide}>×</button>
+              </div>
+              <div className="crt-channel-guide__list" onScroll={(event) => {
+                const rowHeight = event.currentTarget.clientHeight / 8;
+                const row = Math.round(event.currentTarget.scrollTop / rowHeight);
+                setGuideOffset(row);
+              }}>
+                {guideChannels.map((item, index) => (
+                  <button key={item.label} type="button" className="crt-channel-guide__item"
+                    aria-current={selectedPreview === item ? "true" : undefined}
+                    onFocus={() => setGuideFocused(index)}
+                    onClick={() => selectGuideChannel(item, index)}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span>{item.label}</span>
+                    <span aria-hidden="true">{selectedPreview === item ? "◀" : ""}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : null}
           {isTvModelReady && screenLinkHref ? (
             <>
@@ -1218,6 +1155,17 @@ export default function Index() {
               role="group"
               aria-label="Television controls"
             >
+              <button type="button" ref={guideButtonRef}
+                className={`crt-control crt-control--guide${
+                  usedControls.guide ? " crt-control--discovered" : ""
+                }`}
+                data-control-label="GUIDE" aria-label="Show TV channel guide"
+                aria-expanded={isChannelGuideOpen} aria-controls="tv-channel-guide"
+                title="Channel guide" onClick={() => {
+                  clearPreview();
+                  setUsedControls((controls) => ({ ...controls, guide: true }));
+                  setIsChannelGuideOpen((open) => !open);
+                }} />
               <button
                 type="button"
                 className={`crt-control crt-control--channel${
@@ -1252,16 +1200,16 @@ export default function Index() {
           ) : null}
         </div>
       </div>
-      {isHydrated && isMobileTvLayout ? (
-        <MobileDirectoryWheel
-          items={mobileDirectoryItems}
-          onPreview={showPreview}
-          onPreviewEnd={returnToRegularChannels}
-        />
-      ) : null}
       <MobileSocialLinks />
+      <a className="desktop-resume-link" href="/resume.pdf" download
+        onMouseEnter={() => showPreview(rightSections[0].items[0])}
+        onMouseLeave={restoreChannelAfterPreview}
+        onFocus={() => showPreview(rightSections[0].items[0])}
+        onBlur={restoreChannelAfterPreview}>
+        download my resume (PDF)
+      </a>
       <DirectoryColumn
-        sections={directorySections}
+        sections={leftSections}
         side="left"
         onPreview={showPreview}
         onPreviewEnd={restoreChannelAfterPreview}
