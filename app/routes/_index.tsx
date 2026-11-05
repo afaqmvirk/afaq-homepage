@@ -379,6 +379,7 @@ const tvChannels: DirectoryItem[] = [
     year: 2026,
     href: "",
     preview: "/channels/comp5801-seminar-lecture.mp4",
+    captionTrack: "/captions/comp5801-seminar-lecture.json",
     description: "An excerpt from the November 4, 2026 COMP5801 seminar lecture (8:00–11:00).",
     creationDate: "2026-11-04",
   },

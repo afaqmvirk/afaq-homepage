@@ -1,0 +1,324 @@
+{
+  "cues": [
+    {
+      "start": 0,
+      "end": 1.077,
+      "text": "sample some probability space from our qubits, and we notice,"
+    },
+    {
+      "start": 1.077,
+      "end": 5.177,
+      "text": "did this actually help once we perform our action based on our"
+    },
+    {
+      "start": 5.177,
+      "end": 8.936,
+      "text": "measured qubits? If it did help, we apply some reward and,"
+    },
+    {
+      "start": 8.936,
+      "end": 11.669,
+      "text": "you know, change the parameters accordingly, right? So…"
+    },
+    {
+      "start": 12.78,
+      "end": 14.58,
+      "text": "Yeah, the amount of…"
+    },
+    {
+      "start": 14.67,
+      "end": 17.441,
+      "text": "the actual action space that we can have increases with the"
+    },
+    {
+      "start": 17.441,
+      "end": 20.211,
+      "text": "number of qubits we have, so, you know, with one qubit,"
+    },
+    {
+      "start": 20.211,
+      "end": 23.234,
+      "text": "you have two space… you have an action space of two different"
+    },
+    {
+      "start": 23.234,
+      "end": 24.745,
+      "text": "possibilities you can choose from, right?"
+    },
+    {
+      "start": 24.745,
+      "end": 27.515,
+      "text": "You can sample 1 or 0 to do two different actions."
+    },
+    {
+      "start": 27.515,
+      "end": 29.53,
+      "text": "If you have two qubits, you have four,"
+    },
+    {
+      "start": 29.53,
+      "end": 32.049,
+      "text": "and then so on and so forth. It increases exponentially."
+    },
+    {
+      "start": 32.049,
+      "end": 36.449,
+      "text": "Right? So, you put this into an actor-critic model as well,"
+    },
+    {
+      "start": 36.449,
+      "end": 39.249,
+      "text": "with centralized training and decentralized execution with"
+    },
+    {
+      "start": 39.249,
+      "end": 41.649,
+      "text": "variational quantum circuits. So during training,"
+    },
+    {
+      "start": 41.649,
+      "end": 45.249,
+      "text": "a centralized component actually looks at all the information"
+    },
+    {
+      "start": 45.249,
+      "end": 48.049,
+      "text": "from all the agents. During that execution,"
+    },
+    {
+      "start": 48.049,
+      "end": 51.649,
+      "text": "every single agent acts only on its own observations,"
+    },
+    {
+      "start": 51.649,
+      "end": 54.049,
+      "text": "and the centralized training component does"
+    },
+    {
+      "start": 54.05,
+      "end": 57.376,
+      "text": "You know, you don't need to worry about that. So,"
+    },
+    {
+      "start": 57.376,
+      "end": 59.704,
+      "text": "during training, we utilize that quantum entanglement."
+    },
+    {
+      "start": 59.704,
+      "end": 61.7,
+      "text": "During inference, it is not as,"
+    },
+    {
+      "start": 61.7,
+      "end": 62.987,
+      "text": "necessary, and actor-critic learning."
+    },
+    {
+      "start": 62.987,
+      "end": 66.847,
+      "text": "I don't need to go into how that works, I hope. Anyhow,"
+    },
+    {
+      "start": 66.847,
+      "end": 69.42,
+      "text": "we talked a whole lot about quantum computing."
+    },
+    {
+      "start": 69.55,
+      "end": 72.752,
+      "text": "We need to get back to the base of things,"
+    },
+    {
+      "start": 72.752,
+      "end": 74.994,
+      "text": "which is quantum advantage in multi-agent reinforcement"
+    },
+    {
+      "start": 74.994,
+      "end": 77.556,
+      "text": "learning. So, what is that actual quantum advantage?"
+    },
+    {
+      "start": 77.556,
+      "end": 79.797,
+      "text": "What does quantum advantage actually mean? Well,"
+    },
+    {
+      "start": 79.797,
+      "end": 82.359,
+      "text": "there's 3 ways we can think about it."
+    },
+    {
+      "start": 82.59,
+      "end": 84.149,
+      "text": "There's the computational advantage, i.e."
+    },
+    {
+      "start": 84.149,
+      "end": 86.956,
+      "text": "it solves the computational problem faster with fewer resources."
+    },
+    {
+      "start": 86.956,
+      "end": 89.763,
+      "text": "This is one we're particularly interested in, if you,"
+    },
+    {
+      "start": 89.763,
+      "end": 93.193,
+      "text": "might have heard of, like, Shor's algorithm, where we say, oh,"
+    },
+    {
+      "start": 93.193,
+      "end": 96.624,
+      "text": "the nature of quantum computers is that it's going to… I"
+    },
+    {
+      "start": 96.624,
+      "end": 98.183,
+      "text": "shouldn't hand-wave it like that,"
+    },
+    {
+      "start": 98.183,
+      "end": 101.925,
+      "text": "but the nature of quantum computers is that it's going to, like,"
+    },
+    {
+      "start": 101.925,
+      "end": 104.42,
+      "text": "break everything, right? It's going to break encryption."
+    },
+    {
+      "start": 104.42,
+      "end": 107.539,
+      "text": "This is what we think of. The computational advantage becomes"
+    },
+    {
+      "start": 107.54,
+      "end": 111.563,
+      "text": "So much faster, that it, you know, breaks encryption,"
+    },
+    {
+      "start": 111.563,
+      "end": 115.139,
+      "text": "breaks everything that our security systems rely on."
+    },
+    {
+      "start": 115.14,
+      "end": 118.076,
+      "text": "The other one is the statistical slash learning advantage,"
+    },
+    {
+      "start": 118.076,
+      "end": 121.338,
+      "text": "the one we consider when we're talking about machine learning."
+    },
+    {
+      "start": 121.338,
+      "end": 123.621,
+      "text": "We get better predictive accuracy, learning efficiency,"
+    },
+    {
+      "start": 123.621,
+      "end": 125.579,
+      "text": "or task performance. This is very,"
+    },
+    {
+      "start": 125.579,
+      "end": 128.841,
+      "text": "very difficult to calculate directly, as is with, you know,"
+    },
+    {
+      "start": 128.841,
+      "end": 130.472,
+      "text": "actual value functions and whatnot,"
+    },
+    {
+      "start": 130.472,
+      "end": 133.734,
+      "text": "so we try to measure these empirically through our experiments,"
+    },
+    {
+      "start": 133.734,
+      "end": 134.06,
+      "text": "right?"
+    },
+    {
+      "start": 135.26,
+      "end": 137.721,
+      "text": "There's also the non-local coordination advantage,"
+    },
+    {
+      "start": 137.721,
+      "end": 141.413,
+      "text": "which basically says using entanglement gives us access to"
+    },
+    {
+      "start": 141.413,
+      "end": 145.105,
+      "text": "better coordination, better correlation that we would not be"
+    },
+    {
+      "start": 145.105,
+      "end": 148.387,
+      "text": "able to achieve… to achieve with classical computing,"
+    },
+    {
+      "start": 148.387,
+      "end": 152.489,
+      "text": "and so this better correlation due to entanglement is certain,"
+    },
+    {
+      "start": 152.489,
+      "end": 154.13,
+      "text": "it's guaranteed to happen."
+    },
+    {
+      "start": 154.56,
+      "end": 158.21,
+      "text": "So, the paper takes note of two different things."
+    },
+    {
+      "start": 158.29,
+      "end": 162.396,
+      "text": "Most notably, not the very, very cool one at the top, which is,"
+    },
+    {
+      "start": 162.396,
+      "end": 164.922,
+      "text": "like, we're gonna break all, break all encryption,"
+    },
+    {
+      "start": 164.922,
+      "end": 166.501,
+      "text": "but through Co-opNav and CoinGame,"
+    },
+    {
+      "start": 166.501,
+      "end": 169.659,
+      "text": "we establish a statistical learning advantage, that is to say,"
+    },
+    {
+      "start": 169.659,
+      "end": 173.134,
+      "text": "they kind of, jam quantum computing into a coin game experiment,"
+    },
+    {
+      "start": 173.134,
+      "end": 175.344,
+      "text": "we'll talk about what that environment means,"
+    },
+    {
+      "start": 175.344,
+      "end": 178.187,
+      "text": "as well as cooperative navigation, and just measure it,"
+    },
+    {
+      "start": 178.187,
+      "end": 180,
+      "text": "see if it performs better with this quantum entanglement."
+    }
+  ]
+}
