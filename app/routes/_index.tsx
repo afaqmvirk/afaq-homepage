@@ -374,6 +374,14 @@ const tvChannels: DirectoryItem[] = [
     description: "Our COMP 4900/5801 cooperative lunar-mapping MARL project proposal.",
     external: true,
   },
+  {
+    label: "COMP5801 seminar lecture",
+    year: 2026,
+    href: "",
+    preview: "/channels/comp5801-seminar-lecture.mp4",
+    description: "An excerpt from the November 4, 2026 COMP5801 seminar lecture (8:00–11:00).",
+    creationDate: "2026-11-04",
+  },
 ];
 const guideChannels = tvChannels;
 const CRT_STATIC_TRANSITION_MS = 700;
