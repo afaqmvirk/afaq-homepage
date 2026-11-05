@@ -7,19 +7,62 @@
   <script type="module" src="mascots.js"></script>
   <style>
     html,body{width:1600px;height:900px;overflow:hidden;background:var(--paper) var(--texture) repeat}
-    main{position:absolute;left:126px;top:181px}
+    main{position:absolute;left:126px;top:150px;width:900px}
+    .demo-number{font-size:27px;letter-spacing:-.4px;color:#8a8a8a;margin:0 0 22px}
     h1{font-size:132px;font-weight:500;letter-spacing:-7px;line-height:1.02;margin:0}
     .subtitle{font-size:35px;letter-spacing:-.8px;line-height:1.4;color:#909090;margin-top:34px}
-    .placeholder{position:absolute;left:1060px;top:290px;width:320px;height:320px;border:1px dashed #444;border-radius:50%;display:grid;place-items:center}
-    .placeholder-mascot{width:220px;height:220px;opacity:.42;animation:drift 7s ease-in-out infinite}
+    .ring{position:absolute;left:1060px;top:290px;width:320px;height:320px;border:1px dashed #444;border-radius:50%;display:grid;place-items:center;animation:spin 40s linear infinite}
+    .mascot{position:absolute;left:1110px;top:340px;width:220px;height:220px;color:#FF6700;animation:drift 7s ease-in-out infinite}
+    .tag{position:absolute;left:1060px;width:320px;top:650px;text-align:center;font-size:30px;letter-spacing:-.6px;color:#dedede}
+    .qr-section{position:absolute;left:126px;bottom:40px;right:126px;display:flex;justify-content:flex-start;align-items:flex-end;gap:50px}
+    .qr-item{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .qr-item.large .qr-code{width:180px;height:180px}
+    .qr-item .qr-code{width:120px;height:120px;background:#fff;padding:8px;border-radius:8px}
+    .qr-item img{width:100%;height:100%;display:block}
+    .qr-label{font-family:GeistMono,monospace;font-size:16px;color:#909090;letter-spacing:-.3px;text-align:center}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
-  <!-- Grok Bot: replace this document with your slide. Canvas: 1600 x 900.
-       Shared brand styles and local fonts are available from deck.css.
-       Keep assets relative to this folder. Saving this file reloads the deck
-       while keeping the current slide. -->
-  <main aria-label="Editable slide placeholder"><h1>Insert header<br>text here</h1><p class="subtitle">bottom text</p></main>
-  <div class="placeholder" aria-hidden="true"><div class="placeholder-mascot" data-mascot="circle"></div></div>
+  <main aria-label="Demo 7">
+    <p class="demo-number">demo 7</p>
+    <h1>you're<br>looking at it</h1>
+    <p class="subtitle">i asked gork to make this slide<br>two minutes before i went on stage</p>
+  </main>
+  <div class="ring" aria-hidden="true"></div>
+  <div class="mascot" data-mascot="triangle" aria-hidden="true"></div>
+  <p class="tag">made by gork</p>
+  <div class="qr-section">
+    <div class="qr-item large">
+      <div class="qr-code">
+        <img src="assets/qr-hackathon.svg" alt="Stupid Ideas Hackathon QR Code">
+      </div>
+      <p class="qr-label">stupid ideas hackathon</p>
+    </div>
+    <div class="qr-item">
+      <div class="qr-code">
+        <img src="assets/qr-instagram.svg" alt="Instagram QR Code">
+      </div>
+      <p class="qr-label">instagram</p>
+    </div>
+    <div class="qr-item">
+      <div class="qr-code">
+        <img src="assets/qr-linkedin.svg" alt="LinkedIn QR Code">
+      </div>
+      <p class="qr-label">linkedin</p>
+    </div>
+    <div class="qr-item">
+      <div class="qr-code">
+        <img src="assets/qr-x.svg" alt="X QR Code">
+      </div>
+      <p class="qr-label">x</p>
+    </div>
+    <div class="qr-item">
+      <div class="qr-code">
+        <img src="assets/qr-github.svg" alt="GitHub QR Code">
+      </div>
+      <p class="qr-label">github</p>
+    </div>
+  </div>
 </body>
 </html>
